@@ -118,6 +118,30 @@
   (when-let [k (some-> (:key badge) name)]
     {:key k :label (or (:label badge) (str/capitalize k)) :color (get str-colors k "#676868")}))
 
+;; Curated local logo set (assets/logos/<IPEDS unitid>.png) — one uniform mark
+;; per school, keyed by resolved institution name because engine pool records
+;; carry no unitid. Pool logo-urls vary wildly in size/quality; these don't.
+(def ^:private logo-files
+  {"bates college" "160977" "baton rouge community college" "437103"
+   "berea college" "156295" "college of the ozarks" "178697"
+   "delta college of arts & technology" "366270" "ferris state university" "169910"
+   "georgetown university" "131496" "grambling state university" "159009"
+   "howard university" "131520" "iti technical college" "159197"
+   "lake superior state university" "170639"
+   "louisiana state university and agricultural & mechanical college" "159391"
+   "louisiana state university at alexandria" "159382"
+   "louisiana tech university" "159647" "nicholls state university" "159966"
+   "pace university" "194310" "russell sage college" "195128"
+   "saint xavier university" "148627" "scripps college" "123165"
+   "southern university and a & m college" "160621"
+   "southern university at new orleans" "160630" "university of houston" "225511"
+   "university of minnesota-morris" "174251" "university of new orleans" "159939"
+   "university of tulsa" "207971"})
+
+(defn- curated-logo [school-name]
+  (when-let [uid (get logo-files (some-> school-name str/lower-case str/trim))]
+    (str "assets/logos/" uid ".png")))
+
 (defn- ->school [i]
   (let [loc (:location i)
         ad (:admissions-data i)
@@ -134,7 +158,8 @@
                            (str/replace #",? 2-year or above" ", 2-year"))
              :website (:website i)
              :website-label (domain-label (:website i))
-             :logo (:logo-url i)
+             :logo (or (curated-logo (or (:institution-name i) (:name i)))
+                       (:logo-url i))
              :classification (->classification (:str-badge i))
              :commutable? (and in-state? (= "Baton Rouge" (:city loc)))
              :distance-relevant? (not in-state?)}

@@ -655,24 +655,26 @@
        ($ :div {:class "p-5 space-y-3"}
           ;; Logo + Safety/Target/Reach badge — vertically centered together.
           ($ :div {:class "flex items-center justify-between gap-4"}
-             ;; Curated wordmark (includes the name) when available; otherwise a
-             ;; domain-derived favicon + the school name — consistent for any school.
-             (if (:logo school)
-               ($ :img {:src (:logo school) :alt (:name school)
-                        :class "h-9 md:h-10 w-auto object-contain"})
-               ($ :div {:class "flex items-center gap-2 min-w-0"}
-                  (when-let [f (favicon-url (:website school))]
-                    ($ :img {:src f :alt "" :class "w-7 h-7 rounded shrink-0"}))
-                  ($ :h3 {:class "text-lg font-semibold text-[#2a6465] font-head"} (:name school))))
+             ;; LIVE integration: uniform header for every school — a fixed square
+             ;; mark (curated local asset, else domain favicon) beside the name.
+             ;; Wordmark-instead-of-name rendering made tiles inconsistent.
+             ($ :div {:class "flex items-center gap-3 min-w-0"}
+                (when-let [m (or (:logo school) (favicon-url (:website school)))]
+                  ($ :img {:src m :alt "" :class "w-10 h-10 shrink-0 object-contain"}))
+                ($ :h3 {:class "text-lg font-semibold text-[#2a6465] font-head"} (:name school)))
              ;; Selective schools show Safety/Target/Reach; open-admission schools
              ;; (no ACT — e.g. 2-year/CTE) show a neutral "Open Admission" chip.
              ($ str-badge {:classification cls}))
           ($ :div {:class "flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[#676868]"}
              ($ :span (str (:city school) ", " (:state school)))
              ($ :span "·") ($ :span (:type school))
-             ($ :span "·")
-             ($ ext-link {:href (:website school) :label (:website-label school)
-                          :title (:website school) :class "text-sm"}))
+             ;; LIVE integration: engine records can lack a website — drop the
+             ;; separator + link entirely instead of a dangling "·".
+             (when (seq (:website school))
+               ($ :<>
+                  ($ :span "·")
+                  ($ ext-link {:href (:website school) :label (:website-label school)
+                               :title (:website school) :class "text-sm"}))))
           ;; School-level chips removed — descriptors are per-pathway now (see pathway-row),
           ;; since programs at one school vary in field, credential, and demand.
           ($ :button {:class "mt-1 w-full rounded-xl bg-[#05a09c] hover:bg-[#007f81] text-white font-semibold py-2.5 transition-colors"
