@@ -1,0 +1,100 @@
+;; shadow-cljs configuration
+{:deps {:aliases [:dev :test]}
+
+ ;; push-state/index serves index.html for client-side routes (e.g. /rec-demo)
+ ;; on direct load + refresh, so the SPA router can take over.
+ :dev-http {8080 {:root "public" :push-state/index "index.html"}}
+
+ :builds
+ {:test
+  {:target :node-test
+   :output-to "out/test/node-tests.js"
+   :ns-regexp "-test$"
+   :autorun true}
+
+  :app
+  {:target :browser
+   :output-dir "public/js"
+   :asset-path "/js"
+   :modules {:main {:entries [app.core]
+                    :init-fn app.core/init}}
+   :devtools {:preloads [uix.preload devtools.preload]}
+   :dev {:compiler-options {:source-map true
+                           :optimizations :none}}
+   :release {:compiler-options {:optimizations :advanced
+                               :source-map false
+                               :elide-asserts true
+                               :pretty-print false}}
+   :js-options {:js-package-dirs    ["node_modules" "src/gen"]
+                ;; Use :es-unsupported to bypass Closure Compiler parsing of modern JS
+                ;; features like private class properties (#field) in Radix UI dependencies
+                :output-feature-set :es-unsupported
+                :language-in        :unsupported
+                :js-options {:resolve {"gen" "dist/gen"}}}}
+
+  ;; Standalone PROTOTYPE build for public hosting (GitHub Pages). Bundles ONLY
+  ;; the rec-demo page — no router/API/other app code. Relative :asset-path so it
+  ;; works under a project-pages subpath (user.github.io/<repo>/). :simple opts
+  ;; avoid advanced-compilation name-munging issues with recharts/radix.
+  :rec-demo
+  {:target :browser
+   :output-dir "rec-demo-site/js"
+   :asset-path "js"
+   :modules {:main {:entries [rec-demo.standalone]
+                    :init-fn rec-demo.standalone/init}}
+   :release {:compiler-options {:optimizations :simple
+                               :source-map false
+                               :pretty-print false}}
+   :js-options {:js-package-dirs    ["node_modules" "src/gen"]
+                :output-feature-set :es-unsupported
+                :language-in        :unsupported
+                :js-options {:resolve {"gen" "dist/gen"}}}}
+
+  ;; UI-1 dev harness — mounts the school-anchored sections for ONE REAL engine
+  ;; institution record (via the adapter). Used for the live-data Playwright render.
+  ;; LIVE build — the prototype components fed by real resolved data (rec_demo/live.cljs).
+  :rec-live
+  {:target :browser
+   :output-dir "rec-live-site/js"
+   :asset-path "js"
+   :modules {:main {:entries [rec-demo.live]
+                    :init-fn rec-demo.live/init}}
+   :release {:compiler-options {:optimizations :simple
+                               :source-map false
+                               :pretty-print false}}
+   :js-options {:js-package-dirs    ["node_modules" "src/gen"]
+                :output-feature-set :es-unsupported
+                :language-in        :unsupported
+                :js-options {:resolve {"gen" "dist/gen"}}}}
+
+  :rec-demo-harness
+  {:target :browser
+   :output-dir "rec-demo-harness/js"
+   :asset-path "js"
+   :modules {:main {:entries [rec-demo.harness]
+                    :init-fn rec-demo.harness/init}}
+   :release {:compiler-options {:optimizations :simple
+                               :source-map false
+                               :pretty-print false}}
+   :js-options {:js-package-dirs    ["node_modules" "src/gen"]
+                :output-feature-set :es-unsupported
+                :language-in        :unsupported
+                :js-options {:resolve {"gen" "dist/gen"}}}}
+
+  ;; UI-3 dev harness — seeds a REAL resolved-shaped pool into the re-frame app-db
+  ;; and mounts the REAL components.student.recommendations-page, so the actual
+  ;; token-gated student view renders with real data (no API/token). This is the
+  ;; live-data Playwright render target for UI-3.
+  :rec-demo-student-harness
+  {:target :browser
+   :output-dir "rec-demo-student-harness/js"
+   :asset-path "js"
+   :modules {:main {:entries [rec-demo.student-harness]
+                    :init-fn rec-demo.student-harness/init}}
+   :release {:compiler-options {:optimizations :simple
+                               :source-map false
+                               :pretty-print false}}
+   :js-options {:js-package-dirs    ["node_modules" "src/gen"]
+                :output-feature-set :es-unsupported
+                :language-in        :unsupported
+                :js-options {:resolve {"gen" "dist/gen"}}}}}}

@@ -1,368 +1,104 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Your BRYC Recommendations</title>
-<style>
-  :root{
-    --teal-dark:#2a6465; --teal:#05a09c; --teal-mid:#40bfbb; --tint:#d0ecef;
-    --tint-soft:#f3fafb; --ring:#cdeaee; --amber:#e8a93b; --green:#2f9e44;
-    --red:#c92a4a; --gray:#676868; --ink:#313335; --card:#ffffff;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,"Segoe UI",Roboto,Inter,sans-serif;color:var(--ink);
-       background:linear-gradient(135deg,#eff4ff 0%,#eef1fb 50%,#f3effb 100%);min-height:100vh}
-  header{background:var(--teal-dark);padding:16px 28px;display:flex;align-items:center;gap:12px}
-  header h1{color:#fff;font-size:1.35rem}
-  .wrap{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
-  .msgcard{background:rgba(255,255,255,.72);border-radius:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);
-           padding:20px;margin-bottom:14px;white-space:pre-wrap;line-height:1.55}
-  .advisor{display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;
-           box-shadow:0 1px 4px rgba(0,0,0,.06);padding:16px 20px;margin-bottom:26px}
-  .advisor img{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--tint)}
-  .advisor a{color:var(--teal);font-weight:600;text-decoration:none}
-  .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin:26px 0 10px}
-  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px;font-size:.82rem;color:var(--gray)}
-  .legend b{padding:2px 10px;border-radius:999px;color:#fff;font-weight:600}
-  .card{background:var(--card);border-radius:18px;box-shadow:0 1px 5px rgba(0,0,0,.07);
-        border:1px solid var(--ring);padding:22px;margin-bottom:16px;overflow:hidden}
-  .schoolhead{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-  .logobox{height:48px;display:flex;align-items:center;margin-bottom:10px}
-  .logobox img{height:48px;max-width:170px;object-fit:contain}
-  .sname{font-size:1.3rem;font-weight:700;color:var(--teal-dark)}
-  .sub{color:var(--gray);margin-top:4px;font-size:.95rem}
-  .sub a{color:var(--teal);text-decoration:none;font-weight:600}
-  .pill{padding:4px 14px;border-radius:999px;color:#fff;font-weight:600;font-size:.85rem;white-space:nowrap}
-  .learn{width:100%;margin-top:14px;background:#47a09b;color:#fff;font-size:1.05rem;font-weight:700;
-         border:0;border-radius:14px;padding:14px;cursor:pointer}
-  .learn:hover{background:#3d918c}
-  .expander{margin-top:18px;display:none}
-  .expander.open{display:block}
-  .pathway{border:1px solid var(--ring);border-radius:14px;margin-bottom:10px;background:#fff}
-  .pathhead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
-  .pathhead .t{font-weight:700;color:var(--teal-dark);font-size:1.05rem}
-  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
-  .chip{background:var(--tint);color:var(--teal-dark);border-radius:999px;padding:2px 10px;font-size:.75rem;font-weight:600}
-  .pathbody{display:none;padding:0 16px 16px}
-  .pathway.open .pathbody{display:block}
-  .sect{margin-top:14px}
-  .sect h4{color:var(--teal-dark);font-size:.95rem;margin-bottom:8px}
-  .tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-  .tile{background:var(--tint-soft);border:1px solid var(--ring);border-radius:12px;padding:12px}
-  .tile .v{font-size:1.25rem;font-weight:700;color:var(--teal-dark)}
-  .tile .l{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gray);margin-top:2px}
-  .tile .s{font-size:.75rem;color:var(--ink);margin-top:4px;line-height:1.35}
-  .cool{border-left:4px solid var(--teal);background:rgba(208,236,239,.55);border-radius:10px;padding:10px 12px;margin-bottom:8px}
-  .cool b{color:var(--teal-dark)}
-  .cool p{font-size:.88rem;margin-top:3px;line-height:1.45}
-  .note{background:rgba(208,236,239,.5);border-radius:12px;padding:12px 14px;font-size:.9rem;line-height:1.5;margin-top:10px}
-  .bars{display:flex;align-items:flex-end;gap:26px;height:190px;margin:18px 8px 6px;justify-content:center}
-  .bar{display:flex;flex-direction:column;align-items:center;width:120px}
-  .bar .amt{font-weight:700;margin-bottom:4px}
-  .bar .col{width:100%;border-radius:6px 6px 0 0}
-  .bar .cap{font-size:.75rem;color:var(--gray);text-align:center;margin-top:6px;line-height:1.3}
-  .stars{color:var(--amber);font-size:1.1rem;letter-spacing:2px}
-  .role{background:var(--tint-soft);border:1px solid var(--ring);border-radius:12px;padding:10px 12px;margin-bottom:8px}
-  .role a{color:var(--teal);font-weight:700;text-decoration:none}
-  .role .req{background:#fff3d9;color:#9a6a00;border-radius:999px;padding:1px 9px;font-size:.72rem;font-weight:700;margin-left:8px}
-  .role .d{font-size:.82rem;color:var(--gray);margin-top:3px}
-  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:8px}
-  th{color:var(--gray);text-transform:uppercase;font-size:.7rem;letter-spacing:.05em;text-align:left;padding:6px 8px}
-  td{padding:7px 8px;border-top:1px solid var(--ring)}
-  .warn{background:#fff7e6;border:1px solid var(--amber);border-radius:12px;padding:12px 14px;
-        font-size:.85rem;color:#9a6a00;margin-top:12px;line-height:1.5}
-  .links a{display:block;color:var(--teal);font-weight:600;text-decoration:none;margin-top:6px;font-size:.9rem}
-  .toggle{background:none;border:0;color:var(--teal);font-weight:700;cursor:pointer;font-size:.85rem;padding:4px 0}
-  .loading{padding:80px 0;text-align:center;color:var(--gray);font-size:1.05rem}
-  .schol{border:1px solid var(--ring);border-radius:14px;padding:16px;margin-bottom:10px;background:#fff}
-  .schol b{color:var(--teal-dark);font-size:1.02rem}
-  .schol .meta{color:var(--gray);font-size:.85rem;margin:4px 0}
-  .schol p{font-size:.88rem;line-height:1.45;margin-top:5px}
-  .tabbar{display:flex;gap:8px;background:rgba(255,255,255,.6);border-radius:16px;padding:6px;margin:20px 0}
-  .tabbar button{flex:1;border:0;background:none;border-radius:12px;padding:12px;font-size:1rem;font-weight:700;
-                 color:var(--gray);cursor:pointer}
-  .tabbar button.on{background:#fff;color:var(--teal-dark);box-shadow:0 1px 3px rgba(0,0,0,.08)}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRYC — Personalized Recommendations</title>
+    <link rel="icon" type="image/png" href="assets/bryc-logo-white.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <style>
+      :root {
+        --font-body: "Open Sans", system-ui, sans-serif;
+        --font-head: "Proxima Nova", "Montserrat", system-ui, sans-serif;
+      }
+      body { font-family: var(--font-body); }
+      h1, h2, h3, h4, .font-head, .tabular-nums { font-family: var(--font-head); }
+      #boot { min-height: 100vh; display: flex; align-items: center; justify-content: center;
+              background: #f2f3f4; color: #676868; font-size: 15px; }
+    </style>
 </head>
 <body>
-<header><h1 id="hero">Your Personalized Recommendations</h1></header>
-<div class="wrap" id="app"><div class="loading">Loading your recommendations…</div></div>
+    <div id="root"><div id="boot">Loading your recommendations…</div></div>
+    <script>
+    /* ============ Transit+JSON decoder (rolling-cache; port of bryc-scraper) ============ */
+    (function(){
+      const ESC='~', SUB='^', MAPKEY='^ ';
+      function Cache(){ this.codes={}; this.count=0; }
+      Cache.prototype.codeFor=function(i){const hi=Math.floor(i/44),lo=i%44;
+        return hi===0?SUB+String.fromCharCode(lo+48):SUB+String.fromCharCode(hi+48)+String.fromCharCode(lo+48);};
+      Cache.prototype.read=function(s,asKey){
+        if(s.length>0&&s[0]===SUB&&s!==MAPKEY) return this.codes[s];
+        if(s.length>=4&&(asKey||(s[0]===ESC&&':$#'.includes(s[1])))){
+          if(this.count>=94*94){this.codes={};this.count=0;}
+          this.codes[this.codeFor(this.count)]=s; this.count++;
+        }
+        return s;};
+      function scalar(s){
+        if(!s||s[0]!==ESC) return s;
+        if(s.length===1) return s;
+        const c=s[1], rest=s.slice(2);
+        if(c===ESC||c===SUB||c==='`') return s.slice(1);
+        if(c==='#') return {__tag:rest};
+        if(c===':'||c==='$'||c==='u'||c==='r'||c==='b'||c==='c') return rest;
+        if(c==='m'||c==='i'||c==='n'){const n=parseInt(rest,10);return isNaN(n)?rest:n;}
+        if(c==='d'||c==='f'){const n=parseFloat(rest);return isNaN(n)?rest:n;}
+        if(c==='t') return rest;
+        if(c==='?') return rest==='t';
+        return rest;}
+      function dec(node,cache,asKey){
+        if(Array.isArray(node)){
+          if(!node.length) return [];
+          if(node[0]===MAPKEY){
+            const o={};
+            for(let i=1;i+1<node.length;i+=2){o[dec(node[i],cache,true)]=dec(node[i+1],cache,false);}
+            return o;}
+          const f=dec(node[0],cache,false);
+          if(f&&typeof f==='object'&&!Array.isArray(f)&&f.__tag!==undefined){
+            const inner=node.length>1?dec(node[1],cache,false):null;
+            if(f.__tag==="'"||f.__tag==='set'||f.__tag==='list') return inner;
+            const o={}; o[f.__tag]=inner; return o;}
+          return [f].concat(node.slice(1).map(x=>dec(x,cache,false)));}
+        if(typeof node==='string') return scalar(cache.read(node,asKey));
+        if(node&&typeof node==='object'){
+          const o={}; for(const k in node) o[k]=dec(node[k],cache,false); return o;}
+        return node;}
+      window.__transitDecode=raw=>dec(JSON.parse(raw),new Cache(),false);
+    })();
 
-<script>
-/* ================= Transit+JSON decoder (port of bryc-scraper transit_decoder.py) ================= */
-const ESC='~', SUB='^', MAPKEY='^ ';
-class RollingCache{
-  constructor(){this.codes={}; this.count=0;}
-  codeFor(i){const hi=Math.floor(i/44), lo=i%44;
-    return hi===0 ? SUB+String.fromCharCode(lo+48) : SUB+String.fromCharCode(hi+48)+String.fromCharCode(lo+48);}
-  read(s, asKey){
-    if(s.length>0 && s[0]===SUB && s!==MAPKEY) return this.codes[s];
-    if(s.length>=4 && (asKey || (s[0]===ESC && ':$#'.includes(s[1])))){
-      if(this.count>=94*94){this.codes={}; this.count=0;}
-      this.codes[this.codeFor(this.count)]=s; this.count++;
-    }
-    return s;
-  }
-}
-function parseScalar(s){
-  if(!s || s[0]!==ESC) return s;
-  if(s.length===1) return s;
-  const c=s[1], rest=s.slice(2);
-  if(c===ESC||c===SUB||c==='`') return s.slice(1);
-  if(c==='#') return {__tag:rest};
-  if(c===':'||c==='$'||c==='u'||c==='r'||c==='b'||c==='c') return rest;
-  if(c==='m'||c==='i'||c==='n'){const n=parseInt(rest,10); return isNaN(n)?rest:n;}
-  if(c==='d'||c==='f'){const n=parseFloat(rest); return isNaN(n)?rest:n;}
-  if(c==='t') return rest;
-  if(c==='?') return rest==='t';
-  return rest;
-}
-function tdec(node, cache, asKey=false){
-  if(Array.isArray(node)){
-    if(!node.length) return [];
-    if(node[0]===MAPKEY){
-      const o={};
-      for(let i=1;i+1<node.length;i+=2){
-        const k=tdec(node[i],cache,true); o[k]=tdec(node[i+1],cache,false);
+    /* ============ boot: short-link -> token -> query -> window payload -> app ============ */
+    (async function(){
+      const API='https://api.bryc.obney.cloud';
+      const qs=new URLSearchParams(location.search);
+      let token=qs.get('token');
+      try{
+        if(!token){
+          const code=qs.get('s');
+          if(code){
+            const links=await (await fetch('links.json',{cache:'no-store'})).json();
+            token=links[code];
+          }
+        }
+        if(!token) throw new Error('This link is missing its code — ask your advisor to resend it.');
+        const inner=['^ ','~:query/name','~:student/recommendations',
+                     '~:query/timestamp','~m'+Date.now(),
+                     '~:query/id',crypto.randomUUID(),'~:token',token];
+        const r=await fetch(API+'/query',{method:'POST',
+          headers:{'Content-Type':'application/transit+json'},
+          body:JSON.stringify(['^ ','~:query',inner])});
+        if(!r.ok) throw new Error('The recommendation could not be loaded ('+r.status+') — the link may have expired.');
+        const data=window.__transitDecode(await r.text());
+        if(!data||!data.resolved) throw new Error('The recommendation could not be loaded — ask your advisor for a fresh link.');
+        window.__BRYC_REC_DATA__=data;
+      }catch(e){
+        window.__BRYC_REC_ERROR__=String(e.message||e);
       }
-      return o;
-    }
-    const f=tdec(node[0],cache,false);
-    if(f && typeof f==='object' && !Array.isArray(f) && f.__tag!==undefined){
-      const inner = node.length>1 ? tdec(node[1],cache) : null;
-      if(f.__tag==="'"||f.__tag==='set'||f.__tag==='list') return inner;
-      return {[f.__tag]:inner};
-    }
-    return [f].concat(node.slice(1).map(x=>tdec(x,cache)));
-  }
-  if(typeof node==='string') return parseScalar(cache.read(node,asKey));
-  if(node && typeof node==='object'){
-    const o={}; for(const k in node) o[k]=tdec(node[k],cache); return o;
-  }
-  return node;
-}
-const transitDecode = raw => tdec(JSON.parse(raw), new RollingCache());
-
-/* ================= API ================= */
-const API='https://api.bryc.obney.cloud';
-async function loadRec(token){
-  const inner=['^ ','~:query/name','~:student/recommendations',
-               '~:query/timestamp','~m'+Date.now(),
-               '~:query/id', crypto.randomUUID(), '~:token', token];
-  const r=await fetch(API+'/query',{method:'POST',
-    headers:{'Content-Type':'application/transit+json'},
-    body:JSON.stringify(['^ ','~:query',inner])});
-  if(!r.ok) throw new Error('API '+r.status);
-  return transitDecode(await r.text());
-}
-
-/* ================= helpers ================= */
-const usd = n => '$'+Number(n).toLocaleString('en-US');
-const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const BADGE={safety:['Safety','var(--green)'],target:['Target','var(--amber)'],
-             reach:['Reach','var(--red)'],open:['Open Admission','var(--gray)']};
-const starStr=n=>'★'.repeat(n)+'☆'.repeat(Math.max(0,5-n));
-const LW_AREA=45496, LW_STATE=42370;
-
-function bars(items,yMax){
-  const mx=yMax||Math.max(...items.map(i=>i.v))*1.12;
-  return `<div class="bars">`+items.map(i=>
-    `<div class="bar"><div class="amt">${usd(i.v)}</div>
-     <div class="col" style="height:${Math.max(4,Math.round(i.v/mx*150))}px;background:${i.c}"></div>
-     <div class="cap">${esc(i.n)}</div></div>`).join('')+`</div>`;
-}
-
-/* ================= sections ================= */
-function whatsCool(p){
-  const wc=p['whats-cool']; if(!wc||!wc.length) return '';
-  return `<div class="sect"><h4>What's Cool About This Program</h4>`+
-    wc.map(c=>`<div class="cool"><b>${esc(c.title)}</b><p>${esc(c.body)}</p></div>`).join('')+`</div>`;
-}
-function overview(p){
-  const o=p.overview; if(!o) return '';
-  let h=`<div class="sect"><h4>Overview</h4>`;
-  if(o['credential-line']) h+=`<p style="line-height:1.5">${esc(o['credential-line'])}</p>`;
-  if(o['student-connection']) h+=`<div class="note">${esc(o['student-connection'])}</div>`;
-  if(o['day-to-day']&&o['day-to-day'].length)
-    h+=`<div class="sect"><h4>Day to day, people in this field:</h4><ul style="margin-left:20px;line-height:1.6;font-size:.9rem">`+
-       o['day-to-day'].map(t=>`<li>${esc(t)}</li>`).join('')+`</ul></div>`;
-  if(p['program-url']) h+=`<div class="links"><a href="${esc(p['program-url'])}" target="_blank" rel="noopener">See the full program page →</a></div>`;
-  return h+`</div>`;
-}
-function salary(p){
-  const s=p.salary; if(!s) return '';
-  let h=`<div class="sect"><h4>Salary &amp; Job Opportunities</h4>`;
-  let stars=s.stars??0, growth='', growthDetail='';
-  if(s.earnings&&s.earnings.length){                       /* PSEO mode */
-    h+=bars(s.earnings.map(e=>({n:e.label,v:e.value,c:'var(--teal-mid)'}))
-      .concat([{n:'Living Wage — Baton Rouge',v:s['living-wage-area-value']||LW_AREA,c:'#5a5a5a'},
-               {n:'Living Wage — Louisiana',v:s['living-wage-state-value']||LW_STATE,c:'#5a5a5a'}]),100000);
-    growth=s['growth-rate']||''; growthDetail=s['growth-net-new']
-      ?`≈${s['growth-net-new']} net new jobs over 10 years; ${s['growth-openings']} total openings incl. replacement.`
-      :`About ${s['growth-openings']||'—'} openings projected statewide.`;
-  } else if(s.occupation&&typeof s.occupation==='object'){ /* LWC occupation mode */
-    const o=s.occupation; stars=o.stars??stars;
-    h+=`<p style="font-size:.8rem;color:var(--gray);font-style:italic">Occupation-level wage (Louisiana Workforce Commission) — typical statewide wage for ${esc(o['soc-title'])}${o.education?' ('+esc(o.education)+')':''}.</p>`;
-    h+=bars([{n:'Typical Wage — '+(o['soc-title']||''),v:o.median,c:'var(--teal-mid)'},
-             {n:'Living Wage — Baton Rouge',v:LW_AREA,c:'#5a5a5a'},
-             {n:'Living Wage — Louisiana',v:LW_STATE,c:'#5a5a5a'}]);
-    growth=o['growth-pct']||''; growthDetail=o['net-new']
-      ?`≈${o['net-new']} net new jobs over 10 years; ${o.openings} total openings incl. replacement.`
-      :`About ${o.openings||'—'} openings projected statewide.`;
-  }
-  if(s.descriptor) h+=`<div class="note">${esc(s.descriptor)}</div>`;
-  h+=`<div class="tilegrid" style="margin-top:10px">
-    <div class="tile"><div class="stars">${starStr(stars)}</div><div class="l">Job Demand (LWC)</div>
-      <div class="s">LWC rates this ${stars} of 5 in Louisiana.</div></div>`;
-  if(growth) h+=`<div class="tile"><div class="v">${esc(growth)}</div><div class="l">10-Year Growth</div>
-      <div class="s">${esc(growthDetail)}</div></div>`;
-  h+=`</div></div>`;
-  return h;
-}
-function careers(p){
-  const c=p.careers; if(!c) return '';
-  let h=`<div class="sect"><h4>Career Paths</h4>`;
-  if(c.summary) h+=`<p style="font-size:.9rem;line-height:1.5;margin-bottom:8px">${esc(c.summary)}</p>`;
-  const roles=c.roles||[], base=roles.filter(r=>!r['advanced-credential?']), adv=roles.filter(r=>r['advanced-credential?']);
-  const row=r=>`<div class="role">
-      <a href="https://www.onetonline.org/link/summary/${esc(r.soc)}.00" target="_blank" rel="noopener">${esc(r.title)}</a>
-      ${r['advanced-credential?']?'<span class="req">Advanced degree typically required</span>':''}
-      <div class="d">${r.median?`Typical pay about ${usd(r.median)}/yr`:''}${r.education?` · ${esc(r.education)} typical`:''}${r.star?` · ${'★'.repeat(r.star)} demand`:''}</div>
-    </div>`;
-  h+=base.map(row).join('');
-  if(adv.length) h+=`<button class="toggle" onclick="const n=this.nextElementSibling;n.style.display=n.style.display==='none'?'block':'none'">Show advanced-practice paths ▾</button><div style="display:none">${adv.map(row).join('')}</div>`;
-  const pu=c.pums;
-  if(pu&&pu.occupations&&pu.occupations.length){
-    h+=`<div class="sect"><h4>What ${esc(pu.field||'this')}-degree holders in ${esc(pu.scope||'Louisiana')} actually do</h4>
-      <table><tr><th>Occupation</th><th>% of degree holders</th><th>Median pay</th></tr>`+
-      pu.occupations.map(o=>`<tr><td>${o['onet-link']?`<a style="color:var(--teal);font-weight:600;text-decoration:none" href="${esc(o['onet-link'])}" target="_blank" rel="noopener">${esc(o.title)}</a>`:esc(o.title)}</td><td>${esc(o.pct)}</td><td>${usd(o.median)}/yr</td></tr>`).join('')+
-      `</table><p style="font-size:.75rem;color:var(--gray);margin-top:6px">American Community Survey — field-of-degree level (all ${esc(pu.field||'')} degree holders), not this school's graduates.</p></div>`;
-  }
-  return h+`</div>`;
-}
-function ttc(p){
-  const t=p['time-to-credential']; if(!t||!t.designed) return '';
-  const d=t.designed;
-  return `<div class="sect"><h4>Time to Credential</h4><div class="tilegrid">
-    <div class="tile"><div class="v">${esc(d.length||'')}</div><div class="l">Designed length</div><div class="s">${esc(d.credential||'')}</div></div>
-  </div><p style="font-size:.75rem;color:var(--gray);margin-top:6px">${esc(d.note||'')}</p></div>`;
-}
-function aboutTiles(i){
-  const t=[]; const gr=i['grad-rate'];
-  if(gr&&typeof gr==='object'&&gr.rate) t.push({v:gr.rate,l:gr.label||'Graduation Rate',s:''});
-  if(i['enrollment-group-pct']) t.push({v:i['enrollment-group-pct'],l:(i['enrollment-group-label']||'')+' enrollment',
-    s:`${Number(i['enrollment-group-count']).toLocaleString()} of ${Number(i['enrollment-total']).toLocaleString()} students`});
-  else if(i['enrollment-total']) t.push({v:Number(i['enrollment-total']).toLocaleString(),l:'Total enrollment',s:''});
-  const ad=i['admissions-data'];
-  if(ad&&ad['acceptance-rate']!=null) t.push({v:Math.round(ad['acceptance-rate']*100)+'%',l:'Acceptance Rate',
-    s:(ad['act-25th']!=null?`ACT middle 50%: ${ad['act-25th']}–${ad['act-75th']}`:'')});
-  if(i.retention) t.push({v:i.retention,l:'First-Year Retention',s:''});
-  const db=i['avg-debt'];
-  if(db&&db.amount!=null) t.push({v:usd(db.amount),l:'Avg Debt at Graduation',s:db.caption||''});
-  const rz=i.residential;
-  if(rz) t.push({v:rz.type||'',l:'Campus',s:[rz.city,rz['distance-label'],i.setting].filter(Boolean).join(' · ')});
-  if(!t.length) return '';
-  let h=`<div class="sect"><h4>About This School</h4><div class="tilegrid">`+
-    t.map(x=>`<div class="tile"><div class="v">${esc(x.v)}</div><div class="l">${esc(x.l)}</div>${x.s?`<div class="s">${esc(x.s)}</div>`:''}</div>`).join('')+`</div>`;
-  if(i['ability-position']) h+=`<div class="note">Where you stand: ${esc(i['ability-position'])}.</div>`;
-  return h+`</div>`;
-}
-function costs(i){
-  const c=i.costs; if(!c||c.coa==null) return '';
-  const items=[{n:'Total Cost of Attendance',v:c.coa,c:'var(--teal-mid)'}];
-  if((c.tops||0)>0) items.push({n:'After '+(c['tops-name']||'TOPS'),v:Math.max(0,c.coa-c.tops),c:'var(--teal-mid)'});
-  items.push({n:'Your Net Cost (after Pell)',v:c.net,c:'var(--teal-dark)'});
-  let h=`<div class="sect"><h4>What It Costs You</h4>
-    <p style="font-size:.82rem;color:var(--gray)">Tuition &amp; fees ${usd(c['tuition-fees'])}${c.living?` + ${esc(c['living-label']||'Room & board')} ${usd(c.living)}`:''}${c.books?` + Books ${usd(c.books)}`:''} — all annual.</p>`+
-    bars(items);
-  h+=`<div class="warn"><b>This is an estimate only.</b> You must complete the <a style="color:#9a6a00" href="${esc(c['fafsa-url']||'https://studentaid.gov')}" target="_blank" rel="noopener">FAFSA</a> and receive your award letter to know your true cost.</div>`;
-  h+=`<div class="links">`;
-  if(c['npc-url']) h+=`<a href="${esc(c['npc-url'])}" target="_blank" rel="noopener">Estimate your net cost — Net Price Calculator →</a>`;
-  if(c['faid-url']) h+=`<a href="${esc(c['faid-url'])}" target="_blank" rel="noopener">Explore aid — Financial Aid office →</a>`;
-  return h+`</div></div>`;
-}
-function pathway(p,idx){
-  const cluster=(p['cluster-name']||'').replace(/\s*\([^)]*\)\s*$/,'');
-  return `<div class="pathway" id="pw${idx}">
-    <div class="pathhead" onclick="this.parentElement.classList.toggle('open')">
-      <div><div class="t">${esc((p['program-title']||'').replace(/[.\s]+$/,''))}</div>
-        <div class="chips">${p['award-level-name']?`<span class="chip">${esc(p['award-level-name'])}</span>`:''}
-        ${cluster?`<span class="chip">${esc(cluster)}</span>`:''}</div></div>
-      <span style="color:var(--teal);font-weight:700">View pathway ▾</span>
-    </div>
-    <div class="pathbody">${overview(p)}${whatsCool(p)}${salary(p)}${careers(p)}${ttc(p)}</div>
-  </div>`;
-}
-function schoolCard(i){
-  const key=(i['str-badge']&&i['str-badge'].key)||'target';
-  const [blabel,bcolor]=BADGE[key]||BADGE.target;
-  const loc=i.location||{}; const progs=i.programs||[];
-  const site=i.website?`<a href="${esc(i.website)}" target="_blank" rel="noopener">${esc(i.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))}</a>`:'';
-  return `<div class="card">
-    <div class="schoolhead"><div>
-      ${i['logo-url']?`<div class="logobox"><img src="${esc(i['logo-url'])}" alt="" loading="lazy"></div>`:''}
-      <div class="sname">${esc(i['institution-name']||i.name)}</div>
-      <div class="sub">${[loc.city&&loc.state?`${esc(loc.city)}, ${esc(loc.state)}`:'',
-                         i.sectors&&i.sectors[0]?esc(i.sectors[0]):'', site].filter(Boolean).join(' · ')}</div>
-    </div><span class="pill" style="background:${bcolor}">${blabel}</span></div>
-    <button class="learn" onclick="const e=this.nextElementSibling;e.classList.toggle('open');this.textContent=e.classList.contains('open')?'Show Less ▲':'Learn More ▼'">Learn More ▼</button>
-    <div class="expander">
-      <div class="eyebrow" style="margin-top:0">● ${progs.length} Recommended Pathway${progs.length===1?'':'s'}</div>
-      ${progs.map((p,ix)=>pathway(p,Math.random().toString(36).slice(2))).join('')}
-      ${aboutTiles(i)}${costs(i)}
-    </div>
-  </div>`;
-}
-function scholCard(s){
-  return `<div class="schol"><b>${esc(s.name)}</b>
-    <div class="meta">${[s['award-amount-display']||s.award, s.deadline?'Deadline: '+s.deadline:''].filter(x=>x&&!/NOT_FOUND|UNKNOWN/i.test(x)).map(esc).join(' · ')}</div>
-    ${s['personalized-explanation']?`<p>${esc(s['personalized-explanation'])}</p>`:''}
-    ${s['application-url']?`<div class="links"><a href="${esc(s['application-url'])}" target="_blank" rel="noopener">Apply →</a></div>`:''}</div>`;
-}
-
-/* ================= page ================= */
-async function main(){
-  const app=document.getElementById('app');
-  const token=new URLSearchParams(location.search).get('token');
-  if(!token){app.innerHTML='<div class="loading">Missing link token. Ask your advisor to resend your recommendations link.</div>';return;}
-  let r;
-  try{ r=await loadRec(token); }
-  catch(e){ app.innerHTML=`<div class="loading">Could not load your recommendations (${esc(e.message)}). The link may have expired — ask your advisor for a fresh one.</div>`; return; }
-  const res=r.resolved||{};
-  const student=res.student||{};
-  if(student.name) document.getElementById('hero').textContent=student.name.trim()+"'s Personalized Recommendations";
-  const insts=[].concat(res.institutions?.safety||[],res.institutions?.target||[],res.institutions?.reach||[]);
-  const groups={open:[],safety:[],target:[],reach:[]};
-  insts.forEach(i=>{const k=(i['str-badge']&&i['str-badge'].key)||'target';(groups[k]||groups.target).push(i);});
-  const schols=res.scholarships||[];
-  let h='';
-  if(r['advisor-message']) h+=`<div class="eyebrow">Message From Your Advisor</div><div class="msgcard">${esc(r['advisor-message'])}</div>`;
-  const adv=r.advisor;
-  if(adv&&adv.name) h+=`<div class="advisor">${adv['profile-photo-url']?`<img src="${esc(adv['profile-photo-url'])}" alt="">`:''}
-      <div><b>${esc(adv.name)}</b> · BRYC Senior Advisor<br>
-      ${adv.email?`<a href="mailto:${esc(adv.email)}">${esc(adv.email)}</a>`:''}
-      ${adv['scheduling-url']?` · <a href="${esc(adv['scheduling-url'])}" target="_blank" rel="noopener">Book a meeting →</a>`:''}</div></div>`;
-  h+=`<div class="tabbar"><button class="on" onclick="showTab(this,'colleges')">Bachelor's</button>
-      ${schols.length?`<button onclick="showTab(this,'scholarships')">Scholarships</button>`:''}</div>`;
-  h+=`<div id="tab-colleges">`;
-  h+=`<div class="legend"><span><b style="background:var(--green)">Safety</b> likely admit</span>
-      <span><b style="background:var(--amber)">Target</b> good match</span>
-      <span><b style="background:var(--red)">Reach</b> worth the shot</span></div>`;
-  for(const k of ['open','safety','target','reach']){
-    if(!groups[k].length) continue;
-    h+=`<div class="eyebrow">${BADGE[k][0]}</div>`+groups[k].map(schoolCard).join('');
-  }
-  h+=`</div><div id="tab-scholarships" style="display:none">${schols.map(scholCard).join('')}</div>`;
-  app.innerHTML=h;
-}
-function showTab(btn,name){
-  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  document.getElementById('tab-colleges').style.display=name==='colleges'?'block':'none';
-  const s=document.getElementById('tab-scholarships'); if(s)s.style.display=name==='scholarships'?'block':'none';
-}
-main();
-</script>
+      const s=document.createElement('script');
+      s.src='js/main.js';
+      document.body.appendChild(s);
+    })();
+    </script>
 </body>
 </html>

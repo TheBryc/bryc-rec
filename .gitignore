@@ -1,0 +1,7 @@
+node_modules/
+.tools/
+source/rec-live-site/
+source/.shadow-cljs/
+source/src/gen/
+source/tsconfig.tsbuildinfo
+.shadow-cljs/
