@@ -773,9 +773,9 @@
              ($ :div {:class "text-right shrink-0"}
                 ($ :div {:class "text-xl font-bold text-[#05a09c] font-head"} (:award s))
                 ($ :div {:class "text-xs text-[#676868]"} (str "Due " (:deadline s)))))
-          ($ :div {:class "mt-2 flex items-center justify-between gap-2"}
-             ($ :span {:class "rounded-full bg-[#eef6ee] text-[#2f7d32] ring-1 ring-[#bfe0c0] text-[11px] font-semibold px-2 py-0.5"}
-                "Advisor-verified")
+          ;; LIVE integration: Advisor-verified pill removed (Tavidee 2026-08-28) —
+          ;; engine-sourced scholarships are not individually advisor-verified.
+          ($ :div {:class "mt-2 flex items-center justify-end gap-2"}
              ($ :span {:class "text-sm font-semibold text-[#007f81]"} (if open? "Hide ▲" "Details ▼"))))
        (when open?
          ;; space-y-5 separates the blocks (why-fits · eligibility · tips · apply) more than the

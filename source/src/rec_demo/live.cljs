@@ -194,7 +194,10 @@
   {:id (:id s)
    :name (:name s)
    :sponsor (present (:sponsor s))
-   :award (or (present (:award-amount-display s)) (present (:award s)) "See site")
+   ;; Ranged awards arrive as two bare amounts ("$500 $1,000") — join with an
+   ;; en dash so ranges read as ranges (Tavidee 2026-08-28).
+   :award (let [a (or (present (:award-amount-display s)) (present (:award s)) "See site")]
+            (str/replace a #"(\$[\d,.]+[KkMm]?)\s+(?=\$)" "$1 – "))
    :deadline (or (present (:deadline s)) "varies")
    :why-fits (present (:personalized-explanation s))
    :eligibility (or (present (:eligibility s)) "see application page")
@@ -262,7 +265,7 @@
   ($ :div {:class "space-y-3"}
      ($ core/section-eyebrow {:label "Scholarships"})
      ($ :p {:class "text-xs text-[#676868] leading-relaxed"}
-        "Scholarships are advisor-verified and change often — your advisor keeps this list current and can add their own.")
+        "Scholarship details change often — always confirm amounts and deadlines on the application page. Your advisor can add opportunities to this list.")
      (for [s scholarships]
        ($ core/scholarship-card {:key (:id s) :s s}))))
 
