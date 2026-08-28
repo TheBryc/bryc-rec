@@ -239,9 +239,14 @@
        ($ :div {:class "bg-white rounded-2xl shadow-sm ring-1 ring-[#d0ecef] p-5 border-l-4 border-l-[#05a09c]"}
           ($ :p {:class "text-sm md:text-base text-[#313335] leading-relaxed"} message)))
      (when advisor
+       ;; Subtitle by staff email — the advisor payload carries no role/title.
+       ;; Fellows see their assigned College Counselor; advisees see Tavidee.
        ($ core/advisor-card
           {:advisor {:name (:name advisor)
-                     :title "BRYC Senior Advisor"
+                     :title (case (:email advisor)
+                              "tavidee@thebryc.org" "BRYC Senior Advisor"
+                              "rachel@thebryc.org" "Senior Counselor / Writing Lead"
+                              "BRYC College Team")
                      :email (:email advisor)
                      :appointment-url (:scheduling-url advisor)
                      :headshot (or (:profile-photo-url advisor)

@@ -702,9 +702,12 @@
         ($ :div "Email me: "
            ($ ext-link {:href (str "mailto:" (:email advisor)) :label (:email advisor)
                         :title (str "Email " (:name advisor))}))
-        ($ :div
-           ($ ext-link {:href (:appointment-url advisor) :label "Schedule an appointment →"
-                        :title "Book time on my Google Calendar"})))))
+        ;; LIVE integration: present-by-data — no dangling link when the staff
+        ;; record has no scheduling URL yet (populates once acquired).
+        (when (seq (:appointment-url advisor))
+          ($ :div
+             ($ ext-link {:href (:appointment-url advisor) :label "Schedule an appointment →"
+                          :title "Book time with me"}))))))
 
 (defui advisor-messages [{:keys [advisor]}]
   ($ :div {:class "space-y-4"}
