@@ -772,14 +772,14 @@
           ($ :div {:class "flex items-start justify-between gap-3"}
              ($ :div {:class "min-w-0"}
                 ($ :div {:class "font-semibold text-[#2a6465] font-head text-base"} (:name s))
-                ($ :div {:class "text-sm text-[#676868]"} (:sponsor s)))
+                ;; LIVE integration: engine scholarships carry no sponsor — an empty
+                ;; div left a hollow band in the card (Tavidee 2026-08-28).
+                (when (seq (:sponsor s))
+                  ($ :div {:class "text-sm text-[#676868]"} (:sponsor s)))
+                ($ :span {:class "text-sm font-semibold text-[#007f81]"} (if open? "Hide ▲" "Details ▼")))
              ($ :div {:class "text-right shrink-0"}
                 ($ :div {:class "text-xl font-bold text-[#05a09c] font-head"} (:award s))
-                ($ :div {:class "text-xs text-[#676868]"} (str "Due " (:deadline s)))))
-          ;; LIVE integration: Advisor-verified pill removed (Tavidee 2026-08-28) —
-          ;; engine-sourced scholarships are not individually advisor-verified.
-          ($ :div {:class "mt-2 flex items-center justify-end gap-2"}
-             ($ :span {:class "text-sm font-semibold text-[#007f81]"} (if open? "Hide ▲" "Details ▼"))))
+                ($ :div {:class "text-xs text-[#676868]"} (str "Due " (:deadline s))))))
        (when open?
          ;; space-y-5 separates the blocks (why-fits · eligibility · tips · apply) more than the
          ;; 12px between bullets within a list, so the two bullet groups read as distinct sections.
