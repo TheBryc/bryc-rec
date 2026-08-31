@@ -783,7 +783,9 @@
        (when open?
          ;; space-y-5 separates the blocks (why-fits · eligibility · tips · apply) more than the
          ;; 12px between bullets within a list, so the two bullet groups read as distinct sections.
-         ($ :div {:class "px-5 pb-5 space-y-5"}
+         ;; LIVE integration: px-5 is purged from the demo's compiled CSS —
+         ;; p-5 pt-0 (both present) yields the identical box (20px l/r/b, 0 top).
+         ($ :div {:class "p-5 pt-0 space-y-5"}
             ($ :div {:class "rounded-xl bg-[#d0ecef]/50 p-3 text-sm text-[#313335] leading-relaxed"}
                ($ :span {:class "font-semibold text-[#2a6465]"} "Why it fits: ") (:why-fits s))
             ($ bullet-list {:bullets [(str "Eligibility: " (:eligibility s))
