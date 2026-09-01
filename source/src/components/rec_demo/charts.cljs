@@ -30,7 +30,7 @@
 ;; ============================================================================
 
 (defn usd [n]
-  (str "$" (.toLocaleString (js/Math.round n) "en-US")))
+  (if (number? n) (str "$" (.toLocaleString (js/Math.round n) "en-US")) "—"))
 
 (defn ^js multiline-x-tick
   "Custom XAxis tick that renders names containing newlines across <tspan>s,

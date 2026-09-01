@@ -268,7 +268,7 @@
              ($ :div {:class "text-right shrink-0"}
                 ($ :div {:class "text-sm font-bold text-[#2a6465] font-head"} (:pct o))
                 ($ :div {:class "text-[11px] text-[#676868]"}
-                   (str "~$" (.toLocaleString (:median o) "en-US") "/yr"))))))))
+                   (when (number? (:median o)) (str "~$" (.toLocaleString (:median o) "en-US") "/yr")))))))))
 
 (defui careers-section [{:keys [pathway]}]
   (let [roles (:roles (:careers pathway))
@@ -376,8 +376,18 @@
    charge); a COMMUTER school OMITS :living so the COA shows school-charged DIRECT costs only
    (tuition, fees, books). When aid ≥ COA the net is $0 and the copy says so. Axis scales to COA."
   [{:keys [school]}]
+  (if-not (and (map? (:costs school)) (number? (:coa (:costs school))) (number? (:tuition-fees (:costs school))))
+    ;; nil-safe (2026-09-01): older engine records carry no :costs — never format nil; say so instead
+    ($ :div {:class "space-y-3"}
+       ($ :div {:class "rounded-xl bg-[#fff7e6] border border-[#e8a93b] p-4"}
+          ($ :p {:class "text-sm text-[#9a6a00] leading-relaxed"}
+             ($ :span {:class "font-bold"} "Cost details aren't available for this recommendation yet. ")
+             "Ask your counselor to refresh it, and use the school's Net Price Calculator for an estimate."))
+       (when (:npc-url (:costs school))
+         ($ ext-link {:href (:npc-url (:costs school)) :label (str "Estimate your net cost — " (:short-name school) "'s Net Price Calculator →")
+                      :title (str (:short-name school) " — Net Price Calculator")})))
   (let [c (:costs school)
-        usd (fn [n] (str "$" (.toLocaleString n "en-US")))
+        usd (fn [n] (if (number? n) (str "$" (.toLocaleString n "en-US")) "—"))
         living (or (:living c) (:room-board-on c))   ;; nil for commuter schools (no living in COA)
         living-label (or (:living-label c) "Room & board")
         coa (:coa c)
@@ -434,7 +444,7 @@
                        :title (str (:short-name school) " — Net Price Calculator")})
           (when (:faid-url c)
             ($ ext-link {:href (:faid-url c) :label (str "Explore aid — " (:short-name school) "'s Financial Aid office →")
-                         :title (str (:short-name school) " — Financial Aid")}))))))
+                         :title (str (:short-name school) " — Financial Aid")})))))))
 
 ;; ============================================================================
 ;; v3 per-type section renderers (CTE)
