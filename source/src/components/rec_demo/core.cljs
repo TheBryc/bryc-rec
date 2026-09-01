@@ -318,11 +318,14 @@
         gr (:grad-rate school)
         gcolor (case (:indicator gr) "High" "#2f9e44" "Low" "#c92a4a" "#676868")
         to (:transfer-out school)
-        total (.toLocaleString (:enrollment-total school) "en-US")
+        ;; nil-safe: older engine records carry no enrollment/debt — never call
+        ;; .toLocaleString on nil (it threw and blanked the page, 2026-09-01)
+        et (:enrollment-total school)
+        total (when (number? et) (.toLocaleString et "en-US"))
         race (:race-group student)
         grp (get (:enrollment-races school) race)
-        debt (:avg-debt (:costs school))
-        usd (fn [n] (str "$" (.toLocaleString n "en-US")))
+        debt (let [d (:avg-debt (:costs school))] (when (number? d) d))
+        usd (fn [n] (when (number? n) (str "$" (.toLocaleString n "en-US"))))
         loc (str (:city school) ", " (:state school)
                  (when (:distance-relevant? school) (str " · " (:distance school))))
         figs (cond-> []
@@ -342,11 +345,11 @@
                        (assoc :sub (str (:delta gr) " pts vs. " (:normed-against gr)
                                         (when (:peer-average gr)
                                           (str " (avg " (:peer-average gr) "%)"))))))
-               ;; Box 3 — dynamic student-group enrollment (§4.6)
-               true
-               (conj (if (and (:minority? student) grp)
+               ;; Box 3 — dynamic student-group enrollment (§4.6); only when the record has it
+               (or total (and grp (number? (:count grp))))
+               (conj (if (and (:minority? student) grp (number? (:count grp)))
                        {:value (:pct grp) :label (str race " enrollment")
-                        :sub (str (.toLocaleString (:count grp) "en-US") " of " total)}
+                        :sub (str (.toLocaleString (:count grp) "en-US") (when total (str " of " total)))}
                        {:value total :label "Total enrollment"}))
                ;; Box 4 — average debt at graduation (Scorecard GRAD_DEBT_MDN)
                debt
