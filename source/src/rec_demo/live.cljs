@@ -118,29 +118,61 @@
   (when-let [k (some-> (:key badge) name)]
     {:key k :label (or (:label badge) (str/capitalize k)) :color (get str-colors k "#676868")}))
 
-;; Curated local logo set (assets/logos/<IPEDS unitid>.png) — one uniform mark
+;; Curated local logo set (assets/logos/<IPEDS unitid>.<ext>) — one uniform mark
 ;; per school, keyed by resolved institution name because engine pool records
-;; carry no unitid. Pool logo-urls vary wildly in size/quality; these don't.
+;; carry no unitid. Pool logo-urls vary wildly in size/quality and several are
+;; dead (Howard 404, McNeese TLS); these are self-hosted, so they cannot break.
+;; Built by bryc-enhancer/tools/logo_build.py — Wikidata P154 joined on P1771
+;; (IPEDS id), then Wikipedia infobox, then the school's own site.
 (def ^:private logo-files
-  {"bates college" "160977" "baton rouge community college" "437103"
-   "berea college" "156295" "college of the ozarks" "178697"
-   "delta college of arts & technology" "366270" "ferris state university" "169910"
-   "georgetown university" "131496" "grambling state university" "159009"
-   "howard university" "131520" "iti technical college" "159197"
-   "lake superior state university" "170639"
-   "louisiana state university and agricultural & mechanical college" "159391"
-   "louisiana state university at alexandria" "159382"
-   "louisiana tech university" "159647" "nicholls state university" "159966"
-   "pace university" "194310" "russell sage college" "195128"
-   "saint xavier university" "148627" "scripps college" "123165"
-   "southern university and a & m college" "160621"
-   "southern university at new orleans" "160630" "university of houston" "225511"
-   "university of minnesota-morris" "174251" "university of new orleans" "159939"
-   "university of tulsa" "207971"})
+  {"alcorn state university" "175342.png" "austin peay state university" "219602.svg"
+   "baker university" "154688.png" "bates college" "160977.png"
+   "baton rouge community college" "437103.png" "baton rouge general medical center school of nursing & school of radiologic technology" "158325.jpg"
+   "berea college" "156295.png" "bluefield state university" "237215.png"
+   "brown university" "217156.svg" "college of the ozarks" "178697.png"
+   "dartmouth college" "182670.jpg" "davis & elkins college" "237358.png"
+   "delaware state university" "130934.png" "delta college of arts & technology" "366270.png"
+   "dillard university" "158802.svg" "fayetteville state university" "198543.png"
+   "ferris state university" "169910.png" "florida agricultural and mechanical university" "133650.png"
+   "florida international university" "133951.svg" "fort valley state university" "139719.png"
+   "fortis college-baton rouge" "439738.svg" "franciscan missionaries of our lady university" "160074.png"
+   "georgetown university" "131496.png" "georgia institute of technology-main campus" "139755.png"
+   "grambling state university" "159009.png" "hampton university" "232265.png"
+   "herzing university-new orleans" "433536.png" "howard university" "131520.png"
+   "iti technical college" "159197.png" "lake superior state university" "170639.png"
+   "louisiana christian university" "159568.png" "louisiana culinary institute" "449612.jpg"
+   "louisiana state university and agricultural & mechanical college" "159391.png" "louisiana state university at alexandria" "159382.png"
+   "louisiana state university health sciences center-new orleans" "159373.png" "louisiana state university health sciences center-shreveport" "435000.png"
+   "louisiana state university-alexandria" "159382.png" "louisiana state university-shreveport" "159416.png"
+   "louisiana tech university" "159647.png" "loyola university new orleans" "159656.png"
+   "marshall university" "237525.png" "mcneese state university" "159717.svg"
+   "nicholls state university" "159966.png" "norfolk state university" "232937.png"
+   "north carolina a & t state university" "199102.png" "northwestern state university of louisiana" "160038.svg"
+   "ohio state university-main campus" "204796.svg" "pace university" "194310.png"
+   "prairie view a & m university" "227526.png" "princeton university" "186131.svg"
+   "purdue university-main campus" "243780.svg" "remington college-shreveport campus" "451866.webp"
+   "river parishes community college" "436304.svg" "russell sage college" "195128.png"
+   "saint xavier university" "148627.png" "scripps college" "123165.png"
+   "siena heights university" "172264.png" "southeastern louisiana university" "160612.svg"
+   "southern university and a & m college" "160621.png" "southern university at new orleans" "160630.png"
+   "texas a & m international university" "226152.png" "the university of texas at arlington" "228769.jpg"
+   "the university of texas at austin" "228778.svg" "the university of texas at el paso" "228796.svg"
+   "the university of texas rio grande valley" "227368.svg" "tulane university of louisiana" "160755.svg"
+   "university of central florida" "132903.jpg" "university of detroit mercy" "169716.svg"
+   "university of florida" "134130.svg" "university of florida-online" "484473.png"
+   "university of holy cross" "160065.png" "university of houston" "225511.png"
+   "university of louisiana at lafayette" "160658.svg" "university of louisiana at monroe" "159993.png"
+   "university of maryland-college park" "163286.svg" "university of minnesota-morris" "174251.png"
+   "university of mississippi" "176017.svg" "university of new orleans" "159939.png"
+   "university of north carolina at chapel hill" "199120.png" "university of north florida" "136172.svg"
+   "university of north texas at dallas" "484905.svg" "university of tulsa" "207971.png"
+   "university of west florida" "138354.png" "virginia state university" "234155.png"
+   "western kentucky university" "157951.svg" "winston-salem state university" "199999.svg"
+   "xavier university of louisiana" "160904.png"})
 
 (defn- curated-logo [school-name]
   (when-let [uid (get logo-files (some-> school-name str/lower-case str/trim))]
-    (str "assets/logos/" uid ".png")))
+    (str "assets/logos/" uid)))
 
 (defn- ->school [i]
   (let [loc (:location i)
