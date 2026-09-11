@@ -9,20 +9,30 @@
   "name": "University of Alabama at Birmingham",
   "url": "https://thebryc.github.io/brycrec/assets/logos/100663.png"
  },
+ "100706": {
+  "file": "100706.svg",
+  "name": "University of Alabama in Huntsville",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/100706.svg"
+ },
  "100724": {
   "file": "100724.svg",
   "name": "Alabama State University",
   "url": "https://thebryc.github.io/brycrec/assets/logos/100724.svg"
  },
  "100751": {
-  "file": "100751.svg",
+  "file": "100751.png",
   "name": "The University of Alabama",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/100751.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/100751.png"
+ },
+ "100858": {
+  "file": "100858.svg",
+  "name": "Auburn University",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/100858.svg"
  },
  "102094": {
-  "file": "102094.svg",
+  "file": "102094.png",
   "name": "University of South Alabama",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/102094.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/102094.png"
  },
  "102377": {
   "file": "102377.png",
@@ -50,9 +60,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/123165.png"
  },
  "130934": {
-  "file": "130934.png",
+  "file": "130934.svg",
   "name": "Delaware State University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/130934.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/130934.svg"
  },
  "131496": {
   "file": "131496.png",
@@ -105,9 +115,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/137351.svg"
  },
  "138354": {
-  "file": "138354.png",
+  "file": "138354.svg",
   "name": "University of West Florida",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/138354.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/138354.svg"
  },
  "138947": {
   "file": "138947.svg",
@@ -150,9 +160,14 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/141060.png"
  },
  "144740": {
-  "file": "144740.svg",
+  "file": "144740.png",
   "name": "DePaul University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/144740.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/144740.png"
+ },
+ "146719": {
+  "file": "146719.png",
+  "name": "Loyola University Chicago",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/146719.png"
  },
  "148627": {
   "file": "148627.png",
@@ -175,14 +190,14 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/156295.png"
  },
  "157058": {
-  "file": "157058.png",
+  "file": "157058.svg",
   "name": "Kentucky State University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/157058.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/157058.svg"
  },
  "157951": {
-  "file": "157951.svg",
+  "file": "157951.png",
   "name": "Western Kentucky University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/157951.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/157951.png"
  },
  "158325": {
   "file": "158325.jpg",
@@ -200,9 +215,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/158662.png"
  },
  "158802": {
-  "file": "158802.svg",
+  "file": "158802.png",
   "name": "Dillard University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/158802.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/158802.png"
  },
  "159009": {
   "file": "159009.png",
@@ -295,9 +310,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/160579.png"
  },
  "160612": {
-  "file": "160612.svg",
+  "file": "160612.png",
   "name": "Southeastern Louisiana University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/160612.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/160612.png"
  },
  "160621": {
   "file": "160621.png",
@@ -320,9 +335,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/160755.svg"
  },
  "160904": {
-  "file": "160904.png",
+  "file": "160904.svg",
   "name": "Xavier University of Louisiana",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/160904.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/160904.svg"
  },
  "160977": {
   "file": "160977.png",
@@ -349,10 +364,15 @@
   "name": "Morgan State University",
   "url": "https://thebryc.github.io/brycrec/assets/logos/163453.svg"
  },
+ "164216": {
+  "file": "164216.png",
+  "name": "Washington College",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/164216.png"
+ },
  "164924": {
-  "file": "164924.png",
+  "file": "164924.svg",
   "name": "Boston College",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/164924.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/164924.svg"
  },
  "169716": {
   "file": "169716.svg",
@@ -380,9 +400,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/174251.png"
  },
  "175342": {
-  "file": "175342.png",
+  "file": "175342.svg",
   "name": "Alcorn State University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/175342.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/175342.svg"
  },
  "175856": {
   "file": "175856.png",
@@ -420,9 +440,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/182670.jpg"
  },
  "183974": {
-  "file": "183974.svg",
+  "file": "183974.png",
   "name": "Centenary University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/183974.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/183974.png"
  },
  "185572": {
   "file": "185572.svg",
@@ -430,9 +450,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/185572.svg"
  },
  "186131": {
-  "file": "186131.svg",
+  "file": "186131.png",
   "name": "Princeton University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/186131.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/186131.png"
  },
  "186399": {
   "file": "186399.png",
@@ -459,10 +479,20 @@
   "name": "Russell Sage College",
   "url": "https://thebryc.github.io/brycrec/assets/logos/195128.png"
  },
+ "196006": {
+  "file": "196006.png",
+  "name": "SUNY College of Technology at Alfred",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/196006.png"
+ },
  "196866": {
   "file": "196866.png",
   "name": "Union College",
   "url": "https://thebryc.github.io/brycrec/assets/logos/196866.png"
+ },
+ "197869": {
+  "file": "197869.png",
+  "name": "Appalachian State University",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/197869.png"
  },
  "197993": {
   "file": "197993.png",
@@ -515,9 +545,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/204796.svg"
  },
  "206622": {
-  "file": "206622.png",
+  "file": "206622.svg",
   "name": "Xavier University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/206622.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/206622.svg"
  },
  "207388": {
   "file": "207388.svg",
@@ -540,9 +570,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/216339.svg"
  },
  "217156": {
-  "file": "217156.svg",
+  "file": "217156.png",
   "name": "Brown University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/217156.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/217156.png"
  },
  "219602": {
   "file": "219602.svg",
@@ -555,9 +585,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/220978.svg"
  },
  "221351": {
-  "file": "221351.png",
+  "file": "221351.svg",
   "name": "Rhodes College",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/221351.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/221351.svg"
  },
  "221759": {
   "file": "221759.svg",
@@ -590,9 +620,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/226152.png"
  },
  "227216": {
-  "file": "227216.svg",
+  "file": "227216.png",
   "name": "University of North Texas",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/227216.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/227216.png"
  },
  "227368": {
   "file": "227368.svg",
@@ -600,9 +630,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/227368.svg"
  },
  "227526": {
-  "file": "227526.png",
+  "file": "227526.svg",
   "name": "Prairie View A & M University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/227526.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/227526.svg"
  },
  "227757": {
   "file": "227757.svg",
@@ -639,6 +669,11 @@
   "name": "Texas Southern University",
   "url": "https://thebryc.github.io/brycrec/assets/logos/229063.svg"
  },
+ "229115": {
+  "file": "229115.svg",
+  "name": "Texas Tech University",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/229115.svg"
+ },
  "232265": {
   "file": "232265.png",
   "name": "Hampton University",
@@ -654,10 +689,20 @@
   "name": "Roanoke College",
   "url": "https://thebryc.github.io/brycrec/assets/logos/233426.png"
  },
+ "233921": {
+  "file": "233921.svg",
+  "name": "Virginia Polytechnic Institute and State University",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/233921.svg"
+ },
  "234155": {
   "file": "234155.png",
   "name": "Virginia State University",
   "url": "https://thebryc.github.io/brycrec/assets/logos/234155.png"
+ },
+ "235316": {
+  "file": "235316.svg",
+  "name": "Gonzaga University",
+  "url": "https://thebryc.github.io/brycrec/assets/logos/235316.svg"
  },
  "237215": {
   "file": "237215.png",
@@ -675,19 +720,19 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/237525.png"
  },
  "240444": {
-  "file": "240444.png",
+  "file": "240444.svg",
   "name": "University of Wisconsin-Madison",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/240444.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/240444.svg"
  },
  "243744": {
-  "file": "243744.png",
+  "file": "243744.svg",
   "name": "Stanford University",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/243744.png"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/243744.svg"
  },
  "243780": {
-  "file": "243780.svg",
+  "file": "243780.png",
   "name": "Purdue University-Main Campus",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/243780.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/243780.png"
  },
  "366270": {
   "file": "366270.png",
@@ -710,9 +755,9 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/435000.png"
  },
  "436304": {
-  "file": "436304.svg",
+  "file": "436304.png",
   "name": "River Parishes Community College",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/436304.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/436304.png"
  },
  "437103": {
   "file": "437103.png",
@@ -740,8 +785,8 @@
   "url": "https://thebryc.github.io/brycrec/assets/logos/484473.png"
  },
  "484905": {
-  "file": "484905.svg",
+  "file": "484905.png",
   "name": "University of North Texas at Dallas",
-  "url": "https://thebryc.github.io/brycrec/assets/logos/484905.svg"
+  "url": "https://thebryc.github.io/brycrec/assets/logos/484905.png"
  }
 }

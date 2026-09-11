@@ -22,6 +22,7 @@
 </head>
 <body>
     <div id="root"><div id="boot">Loading your recommendations…</div></div>
+    <script src="js/corrections.js"></script>
     <script>
     /* ============ Transit+JSON decoder (rolling-cache; port of bryc-scraper) ============ */
     (function(){
@@ -91,6 +92,10 @@
         if(!r.ok) throw new Error('The recommendation could not be loaded ('+r.status+') — the link may have expired.');
         const data=window.__transitDecode(await r.text());
         if(!data||!data.resolved) throw new Error('The recommendation could not be loaded — ask your advisor for a fresh link.');
+        try{
+          const cr=await fetch('corrections.json?v='+Date.now());
+          if(cr.ok && window.__brycApplyCorrections) window.__brycApplyCorrections(data, await cr.json());
+        }catch(e){ /* corrections are best-effort: never block the page on them */ }
         window.__BRYC_REC_DATA__=data;
       }catch(e){
         window.__BRYC_REC_ERROR__=String(e.message||e);
