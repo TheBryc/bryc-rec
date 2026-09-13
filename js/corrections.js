@@ -29,18 +29,40 @@
       if (typeof c['net'] === 'number') c['net'] = Math.max(0, c['net'] - living);
       changed++; touched.push(name + ' -−$' + living);
     }
+    // Programme links. 363 of 1,431 engine programmes carry no program-url, and engine records carry
+    // unitid: null on every one of them, so the institution NAME is the only handle. College Scorecard is
+    // keyed by the same UNITID we already hold and its Fields of Study section covers this exact CIP —
+    // the same fallback build_record uses for records we inject.
+    var byName = corrections.unitid_by_name || {};
+    var linkBase = corrections.program_link_base || 'https://collegescorecard.ed.gov/school/?';
+    var linked = 0;
+    function fixLinks(i) {
+      if (!i || typeof i !== 'object') return;
+      var progs = i['programs'];
+      if (!Array.isArray(progs) || !progs.length) return;
+      var uid = i['unitid'] || byName[((i['institution-name'] || i['name'] || '').trim().toLowerCase())];
+      if (!uid) return;
+      progs.forEach(function (p) {
+        if (p && typeof p === 'object' && !p['program-url']) {
+          p['program-url'] = linkBase + uid + '#fields-of-study';
+          linked++;
+        }
+      });
+    }
     function walk(node) {
       if (!node || typeof node !== 'object') return;
       var insts = node['institutions'];
       if (insts && typeof insts === 'object') {
         Object.keys(insts).forEach(function (band) {
           var v = insts[band];
-          if (Array.isArray(v)) v.forEach(fixInst);
+          if (Array.isArray(v)) v.forEach(function (i) { fixInst(i); fixLinks(i); });
         });
       }
     }
     walk(data['pool']); walk(data['resolved']);
-    if (changed && window.console) console.info('[bryc] cost corrections applied:', touched.join(', '));
-    return { changed: changed, touched: touched };
+    if (window.console && (changed || linked)) {
+      console.info('[bryc] corrections: ' + changed + ' cost, ' + linked + ' programme link(s) filled');
+    }
+    return { changed: changed, linked: linked, touched: touched };
   };
 })();
