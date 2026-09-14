@@ -60,9 +60,87 @@
       }
     }
     walk(data['pool']); walk(data['resolved']);
-    if (window.console && (changed || linked)) {
-      console.info('[bryc] corrections: ' + changed + ' cost, ' + linked + ' programme link(s) filled');
+
+    /* TOPS. The engine leaves costs.tops = 0 on Louisiana institutions for students who demonstrably
+     * receive TOPS at other schools in the same recommendation -- row26 showed TOPS at Southeastern,
+     * McNeese, Nicholls and BRCC but nothing at LSU, Southern, ULM, UNO, LSUA or LA Tech. That understates
+     * aid and overstates net cost, and it silently pushes a student away from the schools it is missing on.
+     *
+     * Amounts are the official LOSFA 2025-26 award-calculation tables (see tops_source). The student's award
+     * level is not in the record -- costs['tops-name'] is an institution-level label, identical on nearly
+     * every page -- so it is inferred from the amounts the engine DID populate. Two guards keep that
+     * inference honest: at two-year schools TOPS Tech and TOPS Opportunity pay the same, so a level known
+     * only from a two-year award is never used to fill a four-year school, and TOPS Tech never pays at a
+     * four-year school at all. A student with no TOPS anywhere is left untouched -- absence of an award is
+     * not evidence of eligibility, and inventing one would be the same defect in the other direction.
+     */
+    var losfa = corrections.tops_losfa || {};
+    var twoYear = {}; (corrections.tops_two_year || []).forEach(function (n) { twoYear[n] = true; });
+    var topsAlias = corrections.tops_aliases || {};
+    function normName(s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+    var losfaByNorm = {}; Object.keys(losfa).forEach(function (k) { losfaByNorm[normName(k)] = k; });
+    function losfaKey(name) { var n = normName(name); return losfaByNorm[n] || topsAlias[n] || null; }
+
+    var all = [];
+    function collect(node) {
+      if (!node || typeof node !== 'object') return;
+      var insts = node['institutions'];
+      if (insts && typeof insts === 'object') {
+        Object.keys(insts).forEach(function (band) {
+          var v = insts[band];
+          if (Array.isArray(v)) v.forEach(function (i) { if (i && typeof i === 'object') all.push(i); });
+        });
+      }
     }
-    return { changed: changed, linked: linked, touched: touched };
+    collect(data['pool']); collect(data['resolved']);
+
+    var score = {}, sawFourYear = false, observed = 0;
+    all.forEach(function (i) {
+      var c = i['costs']; if (!c) return;
+      var amt = Number(c['tops']) || 0; if (!amt) return;
+      var key = losfaKey(i['institution-name'] || i['name']); if (!key) return;
+      observed++;
+      var levels = losfa[key];
+      Object.keys(levels).forEach(function (lvl) {
+        if (Math.abs(levels[lvl] - amt) < 1.0) {
+          score[lvl] = (score[lvl] || 0) + 1;
+          if (!twoYear[key]) sawFourYear = true;
+        }
+      });
+    });
+    var level = null, best = 0;
+    Object.keys(score).forEach(function (l) { if (score[l] > best) { best = score[l]; level = l; } });
+
+    var topsFilled = 0, topsTotal = 0;
+    if (level) {
+      all.forEach(function (i) {
+        var c = i['costs']; if (!c) return;
+        if (Number(c['tops']) > 0) return;
+        var key = losfaKey(i['institution-name'] || i['name']); if (!key) return;
+        var levels = losfa[key], use;
+        if (twoYear[key]) {
+          use = levels[level] ? level : (c['tops-name'] === 'TOPS-Tech' ? 'tops-tech' : 'tops-opportunity');
+        } else {
+          if (!sawFourYear) return;              // level known only from a two-year award
+          if (level === 'tops-tech') return;     // TOPS Tech does not pay at a four-year school
+          use = level;
+        }
+        var amt = levels[use]; if (!amt) return;
+        var coa = Number(c['coa']) || 0, pell = Number(c['pell']) || 0;
+        c['tops'] = Math.round(amt);
+        c['aid-covered'] = Math.round(pell + amt);
+        c['net'] = coa ? Math.max(0, Math.round(coa - pell - amt))
+                       : Math.max(0, Math.round((Number(c['net']) || 0) - amt));
+        topsFilled++; topsTotal += amt;
+      });
+    }
+
+    if (window.console && (changed || linked || topsFilled)) {
+      console.info('[bryc] corrections: ' + changed + ' cost, ' + linked + ' programme link(s) filled, '
+        + topsFilled + ' TOPS award(s) filled'
+        + (level ? ' at ' + level + ' (' + observed + ' observed)' : ''));
+    }
+    return { changed: changed, linked: linked, touched: touched,
+             topsFilled: topsFilled, topsLevel: level, topsTotal: topsTotal };
   };
 })();

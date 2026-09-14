@@ -235,5 +235,260 @@
   "remington college-shreveport campus": "451866",
   "university of florida-online": "484473",
   "university of north texas at dallas": "484905"
- }
+ },
+ "tops_losfa": {
+  "Baton Rouge Community College": {
+   "tops-tech": 3086.08,
+   "tops-opportunity": 3086.08,
+   "tops-performance": 3486.08,
+   "tops-honors": 3886.08
+  },
+  "Bossier Parish Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Central Louisiana Technical Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Delgado Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Fletcher Technical Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Louisiana Delta Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Louisiana State University-Eunice": {
+   "tops-tech": 2710.64,
+   "tops-opportunity": 2710.64,
+   "tops-performance": 3110.64,
+   "tops-honors": 3510.64
+  },
+  "Northshore Technical Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Northwest Louisiana Technical Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Nunez Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "River Parishes Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "South Louisiana Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "SOWELA Technical Community College": {
+   "tops-tech": 3214.15,
+   "tops-opportunity": 3214.15,
+   "tops-performance": 3614.15,
+   "tops-honors": 4014.15
+  },
+  "Southern University at Shreveport": {
+   "tops-tech": 2618.0,
+   "tops-opportunity": 2618.0,
+   "tops-performance": 3018.0,
+   "tops-honors": 3418.0
+  },
+  "Grambling State University": {
+   "tops-opportunity": 5139.75,
+   "tops-performance": 5539.75,
+   "tops-honors": 5939.75,
+   "tops-excellence": 5939.75
+  },
+  "Louisiana State University-Alexandria": {
+   "tops-opportunity": 4894.25,
+   "tops-performance": 5294.25,
+   "tops-honors": 5694.25,
+   "tops-excellence": 5694.25
+  },
+  "Louisiana State University and Agricultural & Mechanical College": {
+   "tops-opportunity": 7462.98,
+   "tops-performance": 7862.98,
+   "tops-honors": 8262.98,
+   "tops-excellence": 8262.98
+  },
+  "Louisiana State University": {
+   "tops-opportunity": 7462.98
+  },
+  "Louisiana State University-Shreveport": {
+   "tops-opportunity": 5553.0,
+   "tops-performance": 5953.0,
+   "tops-honors": 6353.0,
+   "tops-excellence": 6353.0
+  },
+  "Louisiana Tech University": {
+   "tops-opportunity": 5553.0,
+   "tops-performance": 5953.0,
+   "tops-honors": 6353.0,
+   "tops-excellence": 6353.0
+  },
+  "McNeese State University": {
+   "tops-opportunity": 5147.34,
+   "tops-performance": 5547.34,
+   "tops-honors": 5947.34,
+   "tops-excellence": 5947.34
+  },
+  "Nicholls State University": {
+   "tops-opportunity": 4922.28,
+   "tops-performance": 5322.28,
+   "tops-honors": 5722.28,
+   "tops-excellence": 5722.28
+  },
+  "Northwestern State University of Louisiana": {
+   "tops-opportunity": 5180.0,
+   "tops-performance": 5580.0,
+   "tops-honors": 5980.0,
+   "tops-excellence": 5980.0
+  },
+  "Southeastern Louisiana University": {
+   "tops-opportunity": 5652.21,
+   "tops-performance": 6052.21,
+   "tops-honors": 6452.21,
+   "tops-excellence": 6452.21
+  },
+  "Southern University and A & M College": {
+   "tops-opportunity": 4973.1,
+   "tops-performance": 5373.1,
+   "tops-honors": 5773.1,
+   "tops-excellence": 5773.1
+  },
+  "Southern University at New Orleans": {
+   "tops-opportunity": 4236.21,
+   "tops-performance": 4636.21,
+   "tops-honors": 5036.21,
+   "tops-excellence": 5036.21
+  },
+  "University of Louisiana at Lafayette": {
+   "tops-opportunity": 5406.96,
+   "tops-performance": 5806.96,
+   "tops-honors": 6206.96,
+   "tops-excellence": 6206.96
+  },
+  "University of Louisiana at Monroe": {
+   "tops-opportunity": 5787.52,
+   "tops-performance": 6187.52,
+   "tops-honors": 6587.52,
+   "tops-excellence": 6587.52
+  },
+  "University of New Orleans": {
+   "tops-opportunity": 6090.37,
+   "tops-performance": 6490.37,
+   "tops-honors": 6890.37,
+   "tops-excellence": 6890.37
+  },
+  "Centenary College of Louisiana": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Dillard University": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Louisiana Christian University": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Loyola University New Orleans": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "New Orleans Baptist Theological Seminary": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "University of Holy Cross": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Franciscan Missionaries of Our Lady University": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Saint Joseph Seminary College": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Tulane University of Louisiana": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  },
+  "Xavier University of Louisiana": {
+   "tops-opportunity": 5718.0,
+   "tops-performance": 6118.0,
+   "tops-honors": 6518.0,
+   "tops-excellence": 8500.0
+  }
+ },
+ "tops_two_year": [
+  "Baton Rouge Community College",
+  "Bossier Parish Community College",
+  "Central Louisiana Technical Community College",
+  "Delgado Community College",
+  "Fletcher Technical Community College",
+  "Louisiana Delta Community College",
+  "Louisiana State University-Eunice",
+  "Northshore Technical Community College",
+  "Northwest Louisiana Technical Community College",
+  "Nunez Community College",
+  "River Parishes Community College",
+  "SOWELA Technical Community College",
+  "South Louisiana Community College",
+  "Southern University at Shreveport"
+ ],
+ "tops_aliases": {
+  "louisiana state university and agricultural mechanical college": "Louisiana State University and Agricultural & Mechanical College",
+  "southern university and a m college": "Southern University and A & M College"
+ },
+ "tops_policy": "TOPS award amounts from the official LOSFA 2025-26 award-calculation tables. The engine leaves tops:0 on Louisiana institutions for students who demonstrably receive TOPS elsewhere in the same recommendation, which understates aid and overstates net cost. A student's award level is inferred from the amounts the engine did populate; a level known only from a two-year award is never used to fill a four-year school, and TOPS Tech is never paid at a four-year school.",
+ "tops_source": "https://mylosfa.la.gov/wp-content/uploads/2025-26-TOPS-OPHE-Award-Calculations-7-11-25.pdf ; https://mylosfa.la.gov/wp-content/uploads/2025-26-TOPS-TECH-Award-Calculations-7-30-25.pdf"
 }
