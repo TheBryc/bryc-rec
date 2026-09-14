@@ -132,6 +132,7 @@
     Object.keys(score).forEach(function (l) { if (score[l] > best) { best = score[l]; level = l; } });
 
     var topsFilled = 0, topsTotal = 0;
+    if (corrections.tops_fill_enabled === false) level = null;   // engine now does this itself
     if (award === 'none') level = null;          // recorded as not TOPS-eligible
     if (level) {
       all.forEach(function (i) {
