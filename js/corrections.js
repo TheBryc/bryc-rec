@@ -74,6 +74,26 @@
      * four-year school at all. A student with no TOPS anywhere is left untouched -- absence of an award is
      * not evidence of eligibility, and inventing one would be the same defect in the other direction.
      */
+    /* The student's real award, from the app's own student/tops-award field. The engine ignores it --
+     * it applies the Opportunity rate at every four-year school and the Tech rate at every two-year one,
+     * whatever the student actually holds. That convention is left alone so a page stays internally
+     * consistent, but it gates what may be FILLED: TOPS Tech does not pay at a four-year school, and a
+     * student recorded as 'none' gets nothing. Without this gate, inference from the engine's own numbers
+     * reads every student as Opportunity and hands four-year awards to Tech students. */
+    var awardBy = corrections.tops_award_by_student || {};
+    function studentAward() {
+      try {
+        var t = (new URLSearchParams(location.search)).get('token');
+        if (!t) return null;
+        var seg = t.split('.')[1]; if (!seg) return null;
+        seg = seg.replace(/-/g, '+').replace(/_/g, '/');
+        while (seg.length % 4) seg += '=';
+        var sid = (JSON.parse(atob(seg)) || {})['student-id'];
+        return sid ? (awardBy[sid] || null) : null;
+      } catch (e) { return null; }
+    }
+    var award = studentAward();
+
     var losfa = corrections.tops_losfa || {};
     var twoYear = {}; (corrections.tops_two_year || []).forEach(function (n) { twoYear[n] = true; });
     var topsAlias = corrections.tops_aliases || {};
@@ -112,6 +132,7 @@
     Object.keys(score).forEach(function (l) { if (score[l] > best) { best = score[l]; level = l; } });
 
     var topsFilled = 0, topsTotal = 0;
+    if (award === 'none') level = null;          // recorded as not TOPS-eligible
     if (level) {
       all.forEach(function (i) {
         var c = i['costs']; if (!c) return;
@@ -121,8 +142,9 @@
         if (twoYear[key]) {
           use = levels[level] ? level : (c['tops-name'] === 'TOPS-Tech' ? 'tops-tech' : 'tops-opportunity');
         } else {
-          if (!sawFourYear) return;              // level known only from a two-year award
-          if (level === 'tops-tech') return;     // TOPS Tech does not pay at a four-year school
+          if (award === 'tech') return;          // TOPS Tech does not pay at a four-year school
+          if (!award && !sawFourYear) return;    // no recorded award, level known only from a two-year one
+          if (level === 'tops-tech') return;
           use = level;
         }
         var amt = levels[use]; if (!amt) return;
@@ -138,7 +160,8 @@
     if (window.console && (changed || linked || topsFilled)) {
       console.info('[bryc] corrections: ' + changed + ' cost, ' + linked + ' programme link(s) filled, '
         + topsFilled + ' TOPS award(s) filled'
-        + (level ? ' at ' + level + ' (' + observed + ' observed)' : ''));
+        + (level ? ' at ' + level + ' (' + observed + ' observed)' : '')
+        + (award ? ' [award: ' + award + ']' : ' [award: unrecorded]'));
     }
     return { changed: changed, linked: linked, touched: touched,
              topsFilled: topsFilled, topsLevel: level, topsTotal: topsTotal };
