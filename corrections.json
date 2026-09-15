@@ -551,6 +551,7 @@
   "bb7d6ea5-8c32-4e6d-a3d1-82a117801920": "tech"
  },
  "tops_award_source": "student/tops-award, read from the BRYC app's own student record (read-only query, 2026-09-14). The engine does not use it: it applies the Opportunity rate at every four-year school and the Tech rate at every two-year school regardless of the student's actual award. That convention is left in place so a page stays internally consistent, but it gates what may be filled: a student whose award is TOPS Tech gets no four-year award, and a student whose award is 'none' gets nothing at all.",
- "tops_fill_enabled": true,
- "tops_fill_note": "Kill switch. Set false the moment the engine populates TOPS itself. The engine's own tops_coverage.py (v2.1) gates TOPS on the student's award AND on the program CIP via is_tops_eligible(), so once it is live a zero may be deliberate for a specific program -- and this overlay cannot tell a deliberate zero from a missing one. Verify with tools/post_rollout_check.py: if item 5 (engine-populated TOPS) rises sharply, set this false and republish."
+ "tops_fill_enabled": false,
+ "tops_fill_note": "Kill switch. Set false the moment the engine populates TOPS itself. The engine's own tops_coverage.py (v2.1) gates TOPS on the student's award AND on the program CIP via is_tops_eligible(), so once it is live a zero may be deliberate for a specific program -- and this overlay cannot tell a deliberate zero from a missing one. Verify with tools/post_rollout_check.py: if item 5 (engine-populated TOPS) rises sharply, set this false and republish.",
+ "tops_fill_disabled_on": "2026-09-15: all 92 pools regenerated on the new engine; verified 0 four-year awards on TOPS-Tech students and 0 on ineligible students. The engine now gates on student/tops-award and program CIP, so a zero is deliberate and must not be filled."
 }
