@@ -351,8 +351,59 @@
                      :headshot (or (:profile-photo-url advisor)
                                    "assets/bryc-logo-white.png")}}))))
 
-(defui live-category-tab [{:keys [schools category student]}]
-  (let [groups (for [{:keys [school pathways]} schools
+(defn- ->stp-tile
+  "A short-term program is shaped exactly like an institution program (program-title,
+   award-level-name, sections, salary, careers, time-to-credential) but hangs off the
+   resolved payload's :short-term-programs rather than under a school. Give it a minimal
+   school header so it renders through the SAME school-tile/pathway components as every
+   other pathway."
+  [p]
+  (let [nm (or (:institution-name p) "")]
+    {:school {:unitid (str (:id p))
+              :name nm
+              :short-name nm
+              :city (:city p)
+              :state (:state p)
+              :logo (curated-logo nm)
+              :commutable? (and (= "LA" (:state p)) (= "Baton Rouge" (:city p)))}
+     :pathways [(->pathway p)]}))
+
+(defui apprenticeship-card [{:keys [a]}]
+  ($ :div {:class "bg-white rounded-2xl shadow-sm ring-1 ring-[#d0ecef] p-5 space-y-2"}
+     ($ :div {:class "flex items-baseline justify-between gap-3"}
+        ($ :h3 {:class "text-base md:text-lg font-semibold text-[#2a6465] font-head"}
+           (:apprenticeship-title a))
+        (when (:program-type a)
+          ($ :span {:class "text-xs text-[#676868]"} (:program-type a))))
+     ($ :p {:class "text-sm text-[#313335]"}
+        (str (:company-name a)
+             (when (:city a) (str " — " (:city a) (when (:state a) (str ", " (:state a)))))))
+     (when-let [ov (:overview a)]
+       ($ :p {:class "text-sm text-[#313335] leading-relaxed"} (if (string? ov) ov (:summary ov))))
+     (when (or (:starting-salary-annual a) (:average-salary-annual a))
+       ($ :p {:class "text-sm text-[#313335]"}
+          (str "Earn while you train"
+               (when-let [st (:starting-salary-annual a)]
+                 (str " — starting about $" (.toLocaleString st "en-US") "/yr"))
+               (when-let [av (:average-salary-annual a)]
+                 (str ", about $" (.toLocaleString av "en-US") "/yr with experience")))))
+     (when (seq (:requirements a))
+       ($ :ul {:class "list-disc pl-5 space-y-1"}
+          (for [r (:requirements a)]
+            ($ :li {:key r :class "text-sm text-[#313335]"} r))))
+     (when (:application-url a)
+       ($ :a {:href (:application-url a) :target "_blank" :rel "noreferrer"
+              :class "inline-block text-sm font-medium text-[#05a09c] hover:underline"}
+          "Application details"))))
+
+(defui live-category-tab [{:keys [schools category student shorts apps]}]
+  ;; Career-Technical mirrors the app's own career-technical-flow: the tier-less short-term
+  ;; programs and apprenticeships take the leading rank and interleave ahead of the
+  ;; career-technical school tiles. Both used to be dropped entirely -- live-page read only
+  ;; institutions and scholarships out of `resolved`, so a student with five ticked
+  ;; short-term programs (Marcus Collins) got a page showing none of them.
+  (let [ct? (= category :career-technical)
+        groups (for [{:keys [school pathways]} schools
                      :let [ps (filterv #(= category (:category %)) pathways)]
                      :when (seq ps)]
                  {:school school :pathways ps})]
@@ -360,6 +411,13 @@
        ($ core/str-legend)
        ($ :div {:class "space-y-3"}
           ($ core/section-eyebrow {:label "Pathway Recommendations"})
+          (when ct?
+            (for [{:keys [school pathways]} shorts]
+              ($ core/school-tile {:key (str "stp-" (:unitid school)) :school school
+                                   :pathways pathways :student student})))
+          (when ct?
+            (for [a apps]
+              ($ apprenticeship-card {:key (str "app-" (:id a)) :a a})))
           (for [{:keys [school pathways]} groups]
             ($ core/school-tile {:key (:unitid school) :school school
                                  :pathways pathways :student student})))
@@ -373,9 +431,10 @@
      (for [s scholarships]
        ($ core/scholarship-card {:key (:id s) :s s}))))
 
-(defui live-recommendations-column [{:keys [schools scholarships student]}]
+(defui live-recommendations-column [{:keys [schools scholarships student shorts apps]}]
   (let [[tab set-tab!] (use-state :degree)
-        has-ct? (some (fn [{:keys [pathways]}] (some #(= :career-technical (:category %)) pathways)) schools)
+        has-ct? (or (some (fn [{:keys [pathways]}] (some #(= :career-technical (:category %)) pathways)) schools)
+                    (seq shorts) (seq apps))
         tabs (cond-> [{:key :degree :label "Bachelor's"}]
                has-ct? (conj {:key :career-technical :label "Career-Technical"})
                (seq scholarships) (conj {:key :scholarships :label "Scholarships"}))]
@@ -388,7 +447,8 @@
                                   :on-click #(set-tab! key)}))))
        (if (= tab :scholarships)
          ($ live-scholarships-tab {:scholarships scholarships})
-         ($ live-category-tab {:schools schools :category tab :student student})))))
+         ($ live-category-tab {:schools schools :category tab :student student
+                               :shorts shorts :apps apps})))))
 
 (defui live-page [{:keys [payload]}]
   (let [resolved (:resolved payload)
@@ -400,6 +460,8 @@
                        {:school (->school i)
                         :pathways (mapv ->pathway (:programs i))}))
         scholarships (mapv ->scholarship (:scholarships resolved))
+        shorts (mapv ->stp-tile (:short-term-programs resolved))
+        apps (vec (:apprenticeships resolved))
         advisor (:advisor payload)
         message (:advisor-message payload)
         left? (or advisor (seq message))]
@@ -418,11 +480,13 @@
                   ($ advisor-column {:advisor advisor :message message}))
                ($ :div {:class "lg:col-span-8"}
                   ($ live-recommendations-column
-                     {:schools schools :scholarships scholarships :student student})))
+                     {:schools schools :scholarships scholarships :student student
+                      :shorts shorts :apps apps})))
             ;; no advisor data yet -> single full-width column (no grid; only
             ;; classes the demo build's css already contains)
             ($ live-recommendations-column
-               {:schools schools :scholarships scholarships :student student}))))))
+               {:schools schools :scholarships scholarships :student student
+                :shorts shorts :apps apps}))))))
 
 (defui error-page [{:keys [msg]}]
   ($ :div {:class "min-h-screen bg-[#f2f3f4] flex items-center justify-center"}
