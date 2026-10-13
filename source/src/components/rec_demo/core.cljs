@@ -396,9 +396,19 @@
         y-max (js/Math.ceil (* 1.12 coa))
         direct (+ (:tuition-fees c) (:books c))   ;; tuition+fees+books = school-charged direct cost
         fully-covered? (or (:fully-covered? c) (<= net 0))
-        cost-words (if living
-                     (if (:commuter? c) "tuition, fees, books, and living costs" "tuition, fees, housing, and books")
-                     "tuition, fees, and books")]
+        ;; Name the bar for what is ACTUALLY in it. page_audit raises cost-tuition-only as
+        ;; CRITICAL where the engine's COA carries a single component: six advising pages
+        ;; showed a tuition-only figure under a label promising books, so a student read
+        ;; $7,020 as the full cost of LSU Health Sciences. Never claim a component the
+        ;; record does not carry.
+        books? (number? (:books c))
+        cost-words (cond living (if (:commuter? c) "tuition, fees, books, and living costs"
+                                    "tuition, fees, housing, and books")
+                         books? "tuition, fees, and books"
+                         :else "tuition and fees only — books and living costs are not included")
+        coa-label (cond living "Total Cost\nof Attendance"
+                        books? "Tuition, Fees\n& Books"
+                        :else "Tuition & Fees\n(only)")]
     ($ :div {:class "space-y-4"}
        ($ charts/financial-aid-waterfall
           {:title "Your Estimated Annual Cost — After Financial Aid"
@@ -414,7 +424,7 @@
            :y-max y-max
            ;; LIVE integration: the "After TOPS" step only when TOPS actually reduces
            ;; the cost (out-of-state schools carry :tops 0 — no dead identical bar).
-           :data (cond-> [{:name (if living "Total Cost\nof Attendance" "Tuition, Fees\n& Books")
+           :data (cond-> [{:name coa-label
                            :value coa :label (usd coa) :fill charts/color-earnings}]
                    (pos? (or (:tops c) 0))
                    (conj {:name (str "After\n" (:tops-name c)) :value after-tops
