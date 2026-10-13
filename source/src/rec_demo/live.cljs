@@ -368,33 +368,61 @@
               :commutable? (and (= "LA" (:state p)) (= "Baton Rouge" (:city p)))}
      :pathways [(->pathway p)]}))
 
+(defn- real-apprenticeship?
+  "PURE: is this a record a student can act on? The engine emits placeholder entries titled
+   'General Apprenticeship' with no sponsor and no wage data; page_audit already flags those
+   high (\"the student cannot tell what trade this is\"). They were invisible while the viewer
+   ignored apprenticeships altogether, so rendering them now would publish a known-bad card.
+   Present-by-data: a record without a real trade name is not shown."
+  [a]
+  (let [t (str/trim (or (:apprenticeship-title a) ""))]
+    (and (seq t)
+         (not (re-matches #"(?i)general apprenticeship" t)))))
+
 (defui apprenticeship-card [{:keys [a]}]
-  ($ :div {:class "bg-white rounded-2xl shadow-sm ring-1 ring-[#d0ecef] p-5 space-y-2"}
-     ($ :div {:class "flex items-baseline justify-between gap-3"}
-        ($ :h3 {:class "text-base md:text-lg font-semibold text-[#2a6465] font-head"}
-           (:apprenticeship-title a))
-        (when (:program-type a)
-          ($ :span {:class "text-xs text-[#676868]"} (:program-type a))))
-     ($ :p {:class "text-sm text-[#313335]"}
-        (str (:company-name a)
-             (when (:city a) (str " — " (:city a) (when (:state a) (str ", " (:state a)))))))
-     (when-let [ov (:overview a)]
-       ($ :p {:class "text-sm text-[#313335] leading-relaxed"} (if (string? ov) ov (:summary ov))))
-     (when (or (:starting-salary-annual a) (:average-salary-annual a))
-       ($ :p {:class "text-sm text-[#313335]"}
-          (str "Earn while you train"
-               (when-let [st (:starting-salary-annual a)]
-                 (str " — starting about $" (.toLocaleString st "en-US") "/yr"))
-               (when-let [av (:average-salary-annual a)]
-                 (str ", about $" (.toLocaleString av "en-US") "/yr with experience")))))
-     (when (seq (:requirements a))
-       ($ :ul {:class "list-disc pl-5 space-y-1"}
-          (for [r (:requirements a)]
-            ($ :li {:key r :class "text-sm text-[#313335]"} r))))
-     (when (:application-url a)
-       ($ :a {:href (:application-url a) :target "_blank" :rel "noreferrer"
-              :class "inline-block text-sm font-medium text-[#05a09c] hover:underline"}
-          "Application details"))))
+  (let [earn (:earn a)
+        wp (:wage-progression earn)
+        dem (:demand earn)
+        sponsor (or (:sponsor earn) (:company-name a))
+        url (or (:info-url earn) (:application-url a))]
+    ($ :div {:class "bg-white rounded-2xl shadow-sm ring-1 ring-[#d0ecef] p-5 space-y-3"}
+       ($ :div {:class "flex items-baseline justify-between gap-3"}
+          ($ :h3 {:class "text-base md:text-lg font-semibold text-[#2a6465] font-head"}
+             (:apprenticeship-title a))
+          ($ :span {:class "text-xs uppercase tracking-wide text-[#676868]"} "Apprenticeship"))
+       (when sponsor
+         ($ :p {:class "text-sm text-[#313335]"}
+            (str sponsor
+                 (when (:city a) (str " — " (:city a) (when (:state a) (str ", " (:state a))))))))
+       (when-let [ov (:overview a)]
+         ($ :p {:class "text-sm text-[#313335] leading-relaxed"}
+            (if (string? ov) ov (:summary ov))))
+       ;; Earn while you learn is the whole point of an apprenticeship card.
+       (when wp
+         ($ :div {:class "rounded-xl bg-[#f2fbfb] ring-1 ring-[#d0ecef] p-3 space-y-1"}
+            ($ :p {:class "text-xs uppercase tracking-wide text-[#2a6465] font-semibold"}
+               "You earn while you train")
+            ($ :p {:class "text-sm text-[#313335]"}
+               (str "Starts around " (:start wp)
+                    (when (:average wp) (str ", rising to about " (:average wp) " with experience"))))
+            (when (:start-annual wp)
+              ($ :p {:class "text-xs text-[#676868]"}
+                 (str "That is roughly $" (.toLocaleString (:start-annual wp) "en-US") "/yr to start"
+                      (when (:average-annual wp)
+                        (str " and $" (.toLocaleString (:average-annual wp) "en-US") "/yr average")))))))
+       (when (and dem (:soc-title dem))
+         ($ :p {:class "text-sm text-[#313335]"}
+            (str "Related job: " (:soc-title dem)
+                 (when (:stars dem) (str " · Louisiana demand " (apply str (repeat (:stars dem) "★"))))
+                 (when (:openings dem) (str " · about " (:openings dem) " openings a year")))))
+       (when (seq (:requirements a))
+         ($ :ul {:class "list-disc pl-5 space-y-1"}
+            (for [r (:requirements a)]
+              ($ :li {:key r :class "text-sm text-[#313335]"} r))))
+       (when url
+         ($ :a {:href url :target "_blank" :rel "noreferrer"
+                :class "inline-block text-sm font-medium text-[#05a09c] hover:underline"}
+            "How to apply")))))
 
 (defui live-category-tab [{:keys [schools category student shorts apps]}]
   ;; Career-Technical mirrors the app's own career-technical-flow: the tier-less short-term
@@ -461,7 +489,7 @@
                         :pathways (mapv ->pathway (:programs i))}))
         scholarships (mapv ->scholarship (:scholarships resolved))
         shorts (mapv ->stp-tile (:short-term-programs resolved))
-        apps (vec (:apprenticeships resolved))
+        apps (vec (filter real-apprenticeship? (:apprenticeships resolved)))
         advisor (:advisor payload)
         message (:advisor-message payload)
         left? (or advisor (seq message))]
