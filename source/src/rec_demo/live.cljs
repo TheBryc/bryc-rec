@@ -331,9 +331,28 @@
 ;; page — composition mirrors core/rec-demo-page exactly (same classes)
 ;; ---------------------------------------------------------------------------
 
+;; The student's roadmap (bryc-advising-task-manager). The page already holds the student's rec
+;; token; the roadmap's /api/rec/enter exchanges it for a session of its own and opens with this
+;; recommendation loaded, so there is nothing to sign in to and no second link to send. Same tab:
+;; it is the next page of the same thing, not a reference.
+(def roadmap-origin "https://bryc-advising-task-manager.vercel.app")
+
+(defn- rec-token [] (some-> (.-__BRYC_REC_TOKEN__ js/window) str not-empty))
+
+(defui roadmap-card [_]
+  (when-let [token (rec-token)]
+    ($ :div {:class "bg-white rounded-2xl shadow-sm ring-1 ring-[#d0ecef] p-5"}
+       ($ :div {:class "font-semibold text-[#2a6465] font-head"} "Your Roadmap")
+       ($ :p {:class "mt-1 text-sm text-[#676868] leading-relaxed"}
+          "Turn this into next steps: mark the options you're considering, start applications, and see what's due and when.")
+       ($ :a {:href (str roadmap-origin "/api/rec/enter?token=" (js/encodeURIComponent token))
+              :class "mt-4 block text-center rounded-xl bg-[#05a09c] hover:bg-[#007f81] text-white font-semibold py-2.5 transition-colors no-underline"}
+          "Open my roadmap →"))))
+
 (defui advisor-column [{:keys [advisor message]}]
   ($ :div {:class "space-y-4"}
-     ($ core/section-eyebrow {:label "A Message From Your Advisor"})
+     (when (or advisor (seq message))
+       ($ core/section-eyebrow {:label "A Message From Your Advisor"}))
      (when (seq message)
        ($ :div {:class "bg-white rounded-2xl shadow-sm ring-1 ring-[#d0ecef] p-5 border-l-4 border-l-[#05a09c]"}
           ($ :p {:class "text-sm md:text-base text-[#313335] leading-relaxed"} message)))
@@ -349,7 +368,8 @@
                      :email (:email advisor)
                      :appointment-url (:scheduling-url advisor)
                      :headshot (or (:profile-photo-url advisor)
-                                   "assets/bryc-logo-white.png")}}))))
+                                   "assets/bryc-logo-white.png")}}))
+     ($ roadmap-card {})))
 
 (defn- ->stp-tile
   "A short-term program is shaped exactly like an institution program (program-title,
@@ -492,7 +512,7 @@
         apps (vec (filter real-apprenticeship? (:apprenticeships resolved)))
         advisor (:advisor payload)
         message (:advisor-message payload)
-        left? (or advisor (seq message))]
+        left? (or advisor (seq message) (rec-token))]
     ($ :div {:class "min-h-screen bg-[#f2f3f4]"}
        ($ :div {:class "bg-[#2a6465] shadow-sm px-6 md:px-8 py-4"}
           ($ :div {:class "max-w-6xl mx-auto flex items-center gap-3"}

@@ -97,6 +97,7 @@
           if(cr.ok && window.__brycApplyCorrections) window.__brycApplyCorrections(data, await cr.json());
         }catch(e){ /* corrections are best-effort: never block the page on them */ }
         window.__BRYC_REC_DATA__=data;
+        window.__BRYC_REC_TOKEN__=token;   /* for the "Open my roadmap" button; never rendered */
       }catch(e){
         window.__BRYC_REC_ERROR__=String(e.message||e);
       }
