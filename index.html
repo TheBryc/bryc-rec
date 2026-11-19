@@ -71,7 +71,22 @@
 
     /* ============ boot: short-link -> token -> query -> window payload -> app ============ */
     (async function(){
+      /* Default host for every real student. Unchanged. */
       const API='https://api.bryc.obney.cloud';
+      /* Demo-only backdoor: two synthetic fixture students whose recommendations live on
+         BRYC's self-hosted instance. Routing is keyed on the student id inside the token,
+         so a real student's id is never in the list and their path is identical to before.
+         Remove DEMO_IDS to retire this with no other edit. */
+      const DEMO_API='https://app.thebryc.org';
+      const DEMO_IDS=['ed568553-05dd-4ce3-8566-a5753205de7d',
+                      '50b71865-8224-444f-a6ef-ea9cee58a7a2'];
+      const apiFor=t=>{
+        try{
+          const b=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+          const p=JSON.parse(atob(b+'==='.slice((b.length+3)%4)));
+          return DEMO_IDS.indexOf(p['student-id'])>=0?DEMO_API:API;
+        }catch(e){ return API; }   /* an unreadable token behaves exactly as before */
+      };
       const qs=new URLSearchParams(location.search);
       let token=qs.get('token');
       try{
@@ -86,7 +101,7 @@
         const inner=['^ ','~:query/name','~:student/recommendations',
                      '~:query/timestamp','~m'+Date.now(),
                      '~:query/id',crypto.randomUUID(),'~:token',token];
-        const r=await fetch(API+'/query',{method:'POST',
+        const r=await fetch(apiFor(token)+'/query',{method:'POST',
           headers:{'Content-Type':'application/transit+json'},
           body:JSON.stringify(['^ ','~:query',inner])});
         if(!r.ok) throw new Error('The recommendation could not be loaded ('+r.status+') — the link may have expired.');
