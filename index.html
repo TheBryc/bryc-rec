@@ -111,6 +111,15 @@
           const cr=await fetch('corrections.json?v='+Date.now());
           if(cr.ok && window.__brycApplyCorrections) window.__brycApplyCorrections(data, await cr.json());
         }catch(e){ /* corrections are best-effort: never block the page on them */ }
+        /* The advisor card's headshot is presigned from the vendor's S3 bucket. A
+           recommendation served by BRYC's own instance has no URL to give, so the card
+           rendered with a blank where the advisor's face belongs. Fall back to the
+           headshot already shipped with this viewer. Only fills a MISSING value, so a
+           real presigned URL always wins. */
+        try{
+          const adv=data&&data['advisor'];
+          if(adv&&!adv['profile-photo-url']) adv['profile-photo-url']='assets/advisor-tavidee.png';
+        }catch(e){ /* cosmetic: never block the page on it */ }
         window.__BRYC_REC_DATA__=data;
         window.__BRYC_REC_TOKEN__=token;   /* for the "Open my roadmap" button; never rendered */
       }catch(e){
